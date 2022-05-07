@@ -1,0 +1,230 @@
+.main-pan {
+    display: flex;
+    transition: margin .3s;
+    justify-content: center;
+    margin: calc(50vh - 260px) auto 0;
+}
+
+.login-pan {
+    display: flex;
+    height: 440px;
+    overflow: hidden;
+    text-align: center;
+    align-items: center;
+    transition: width .3s;
+}
+
+.fish {
+    width: 40px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: var(--color-main);
+}
+
+.main-title {
+    color: var(--color-font);
+    font-size: 1.2rem;
+}
+
+.login-pan input {
+    border: 0;
+    width: 90%;
+    margin: 15px auto 0 auto;
+    color: var(--color-font);
+    background: var(--color-card-1);
+}
+.login-pan input:focus {
+    color: var(--color-font);
+    background: var(--color-card-1);
+    -webkit-box-shadow:0 0 5px var(--color-shader);
+    -moz-box-shadow:0 0 5px var(--color-shader);
+    box-shadow:0 0 5px var(--color-shader);
+}
+
+.fog-pwd {
+    width: 90%;
+    margin: 0 auto;
+    text-align: right;
+}
+.fog-pwd span {
+    margin-right: 5px;
+    font-size: 0.9rem;
+    line-height: 2.5rem;
+    color: var(--color-font-1);
+}
+
+.no-acc {
+    font-size: 0.9rem;
+    line-height: 3rem;
+    color: var(--color-font-1);
+}
+.no-acc a{
+    color: var(--color-main);
+}
+.no-acc a:hover {
+    color: var(--color-main);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.login-bt {
+    border: 0;
+    width: 55px;
+    height: 55px;
+    margin-top: 10px;
+    border-radius: 45px;
+    transition: opacity .3s;
+    color: var(--color-font-1-r);
+    background: var(--color-main);
+}
+.login-bt:focus {
+    outline: none;
+    opacity: 0.9;
+}
+.login-bt:hover {
+    opacity: 0.95;
+}
+.login-bt svg {
+    width: 40px;
+    margin-top: 3px;
+    margin-left: 13px;
+}
+
+.err-pan {
+    display: flex;
+    padding: 10px;
+    margin-top: 20px;
+    font-size: 0.97rem;
+    color: var(--color-font-r);
+    background: var(--color-main);
+}
+.err-pan svg {
+    width: 17px;
+    margin-left: 10px;
+    margin-right: 20px;
+}
+.err-pan span {
+    line-height: 30px;
+}
+
+.back-button {
+    position: fixed;
+    margin-left: 30px;
+    margin-top: -600px;
+    height: 440px;
+    width: 80px;
+    display: none;
+}
+.back-button:hover svg {
+    width: 22px;
+}
+.back-button svg {
+    width: 20px;
+    margin-top: 315px;
+    margin-left: -10px;
+    transition: width 0.2s;
+    color: var(--color-main);
+}
+
+.login-box-1 {
+    width: 30%;
+    transition: width 0.3s, margin-left 0.4s;
+    margin-left: 20%;
+}
+.login-box-2 {
+    width: 80px;
+    transition: width 0.3s, margin-left 0.4s;
+    margin-left: 0;
+}
+
+.login-body-1 {
+    opacity: 1;
+    width: 100%;
+    float: left;
+    transition: margin-left 0.5s, opacity 0.2s;
+}
+.login-body-2 {
+    opacity: 0;
+    margin-left: calc(-100% - 40px);
+    width: 100%;
+    float: left;
+    transition: margin-left 0.5s, opacity 0.2s;
+    overflow: hidden;
+}
+
+
+.reg-box-1 {
+    transition: visibility 0.4s cubic-bezier(0, 0, 0.38, 0.96) 0s, margin 0.1s cubic-bezier(0, 0, 0.38, 0.96) 0s, opacity 0.3s 0.1s;
+    width: 30%;
+    margin-left: -10%;
+    z-index: -1;
+    visibility: collapse;
+    opacity: 0.1;
+    height: 440px;
+}
+.reg-box-2 {
+    transition: visibility 0.4s cubic-bezier(0, 0, 0.38, 0.96) 0s, margin 0.1s cubic-bezier(0, 0, 0.38, 0.96) 0s, opacity 0.3s 0.1s;
+    width: 30%;
+    margin-left: 20px;
+    z-index: 1;
+    opacity: 1;
+    height: 440px;
+    visibility: visible;
+}
+
+@media screen and (max-width: 1200px) {
+    .main-pan {
+        width: 45%;
+    }
+}
+
+@media screen and (max-width: 992px){
+    .main-pan {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .main-pan {
+        width: 100%;
+        margin-top: 0 !important;
+        flex-direction: column;
+    }
+
+    .login-box-1 {
+        width: 100%;
+        transition: width 0.3s, margin-left 0.4s;
+        margin-left: 0;
+    }
+    .login-box-2 {
+        width: 100%;
+        transition: width 0.3s, margin-left 0.4s;
+        margin-left: 0;
+        height: 80px;
+        margin-bottom: 20px;
+    }
+    .login-box-2 div[class="login-pan ss-card"] {
+        height: 80px;
+    }
+
+    .login-body-2 label[class="back-button"] {
+        position: fixed;
+        margin-left: 130px;
+        margin-top: -365px;
+        height: 80px;
+        width: 100%;
+    }
+    .login-body-2 label[class="back-button"] svg {
+        margin-top: 30px;
+    }
+
+    .reg-box-2 {
+        transition: visibility 0.4s cubic-bezier(0, 0, 0.38, 0.96) 0s, margin 0.1s cubic-bezier(0, 0, 0.38, 0.96) 0s, opacity 0.3s 0.1s;
+        width: 100%;
+        margin-left: 0;
+        z-index: 1;
+        opacity: 1;
+        height: 440px;
+        visibility: visible;
+    }
+}

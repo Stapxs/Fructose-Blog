@@ -4,4 +4,9 @@
 
 <web-app>
   <display-name>果糖博客</display-name>
+
+  <error-page>
+    <location>/error</location>
+  </error-page>
+
 </web-app>

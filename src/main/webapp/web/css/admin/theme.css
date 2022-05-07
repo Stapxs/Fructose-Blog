@@ -1,0 +1,75 @@
+.opt-bar {
+    margin-top: 20px;
+    background: var(--color-card-1);
+    text-align: left;
+    padding: 10px 15px;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.opt-bar div {
+    height: 1.2rem;
+    width: 5px;
+    background: var(--color-main);
+    border-radius: 5px;
+}
+.opt-bar span {
+    margin-left: 10px;
+    font-size: 1rem;
+    font-weight: normal;
+    flex: 1;
+}
+.opt-bar button {
+    padding: 0 30px;
+}
+
+.theme-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--color-card-1);
+    margin-top: 10px;
+    border-radius: 7px;
+    padding: 20px;
+}
+.theme-view img {
+    max-height: 50vh;
+    border-right: 7px;
+}
+.theme-view > div {
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    align-items: flex-end;
+}
+.theme-view div > div:first-child {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.theme-view div > div:first-child p {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--color-main);
+    margin-bottom: 5px;
+}
+.theme-view div > div:first-child span {
+    color: var(--color-font-1);
+}
+.theme-view div > div:first-child a {
+    font-size: 0.9rem;
+    color: var(--color-font-2);
+}
+.theme-view div > div:last-child {
+    display: flex;
+    flex-direction: column;
+}
+.theme-view div > div:last-child button {
+    padding: 0 30px;
+    margin: 2px 0;
+}
+.theme-view div > div:last-child button:not(:last-child) {
+    background: var(--color-card-2);
+    color: var(--color-font-2);
+}

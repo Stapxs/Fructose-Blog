@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 @PropertySource("classpath:jdbc.properties")
 @Data
 public class JdbcConfig {
+    @Value("${databaseType}")
+    private String type;
     @Value("${jdbc.driverClassName}")
     private String driver;
     @Value("${jdbc.url}")

@@ -23,7 +23,7 @@ import java.util.Properties;
 
 @Configuration
 @ComponentScan("cn.stapxs.blog")
-@MapperScan("cn.stapxs.api.dao")
+@MapperScan("cn.stapxs.blog.mapper")
 @EnableTransactionManagement //开启事务
 @EnableAspectJAutoProxy //开启AspectJ自动代理
 public class AppRootConfig {

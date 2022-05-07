@@ -1,0 +1,215 @@
+.main-board {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.left-list {
+    transition: transform .3s, width .3s, margin .3s;
+    width: 300px;
+}
+.left-list > div:first-child {
+    margin: -20px -20px 10px -20px;
+    background: var(--color-main);
+    border-radius: 7px 7px 0 0;
+    padding: 10px calc(30px + 1rem) 10px 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--color-font-r);
+    font-weight: bold;
+}
+.left-list > div:first-child span {
+    white-space: nowrap;
+}
+.left-list > div:first-child svg {
+    height: 1rem;
+    float: right;
+    margin-right: calc(-1rem - 10px);
+    margin-top: calc(-1rem - 3px);
+    fill: var(--color-font-r);
+    display: block;
+    width: 100%;
+    transform: translateX(50%);
+    cursor: pointer;
+}
+.left-list > div:not(:first-child) {
+    background: var(--color-card-1);
+    border-radius: 7px;
+    padding: 10px 10px 10px 20px;
+    margin: 0 -10px 10px -10px;
+}
+.left-list > div:not(:first-child) > button > svg {
+    height: 25px;
+    margin-top: -35px;
+}
+.left-list > div:not(:first-child) > button > header {
+    font-size: 1rem;
+    font-weight: normal;
+    letter-spacing: normal;
+}
+.left-list > div:not(:first-child) > button > header > div {
+    transition: transform .3s;
+ }
+
+.lis-button {
+    background: transparent;
+    text-align: left;
+    height: 25px;
+    width: 100%;
+    padding: 0;
+    border: 0;
+}
+.lis-button:focus {
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none;
+    border: 0;
+}
+.lis-button:hover {
+    background: transparent;
+}
+.lis-button svg {
+    transition: transform .2s ease-in;
+    color: var(--color-main);
+    margin-right: 10px;
+    margin-top: -36px;
+    height: 30px;
+    float: right;
+}
+.lis-body {
+    margin: 10px -10px -10px -20px;
+    background: var(--color-card);
+    padding-top: 2px;
+    border-top: 1px dashed var(--color-main);
+}
+.lis-body > div {
+    background: var(--color-card-1);
+    padding: 10px;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+    cursor: pointer;
+}
+.lis-body > div div:first-child {
+    width: 5px;
+    margin-right: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+    height: 1.2rem;
+    background: var(--color-main);
+    transform: scaleY(0);
+    transition: transform .3s;
+}
+.lis-body > div:hover div:first-child {
+    transform: scaleY(1);
+}
+.lis-body > div span {
+    font-size: 0.9rem;
+    line-height: 1.5rem;
+}
+.lis-body > div svg {
+    height: 1.2rem;
+    margin-right: 10px;
+    fill: var(--color-main);
+}
+
+.main-iframe {
+    flex: 1;
+    margin-left: 20px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.show-tab {
+    border-bottom: 0;
+    background: var(--color-card-1);
+    border-radius: 7px;
+    margin: 10px;
+}
+.show-tab li {
+    margin: 10px 0 10px 10px !important;
+    border-radius: 7px;
+    background: var(--color-card-2);
+    transition: transform .1s;
+    transform-origin: 0;
+}
+.show-tab li a {
+    color: var(--color-font);
+    font-size: 0.9rem;
+    padding: 5px 15px;
+    transition: color .3s, background .3s;
+    border-radius: 7px !important;
+    border: 0 !important;
+}
+.show-tab li a button {
+    background: #00000021;
+    border: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    margin-left: 5px;
+    margin-right: -5px;
+}
+.show-tab li a button:focus {
+    outline: none;
+}
+.show-tab li a button svg {
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-top: -2px;
+    fill: var(--color-font-1);
+}
+.nav-tabs .nav-link.active {
+    border: 0;
+    border-radius: 7px;
+    background: var(--color-main);
+    color: var(--color-font-r);
+}
+.nav-tabs .nav-link.active > button > svg {
+    fill: var(--color-font-r);
+}
+
+.tab-body {
+    height: 100%;
+    margin: 10px 10px 10px 10px;
+    overflow: hidden;
+}
+.tab-body > div {
+    height: 100%;
+}
+.tab-body > div > iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+.welcome-top {
+    display: flex;
+    background: var(--color-main);
+    padding: 20px;
+}
+.welcome-top > svg {
+    width: 55px;
+    height: 55px;
+    fill: var(--color-font-1-r);
+    margin-right: 20px;
+    background: #00000029;
+    border-radius: 50%;
+    padding: 10px 14px;
+}
+.welcome-top > div {
+    display: flex;
+    color: var(--color-font-r);
+    flex-direction: column;
+    justify-content: center;
+}
+.welcome-top > div span:first-child {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+.welcome-top > div span:last-child {
+    color: var(--color-font-1-r);
+}

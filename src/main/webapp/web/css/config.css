@@ -1,0 +1,271 @@
+body {
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.show-card {
+    height: calc(100vh - 200px - 2rem);
+    margin-top: 20px;
+    display: flex;
+}
+
+.opt-list {
+    width: 25%;
+    margin-right: 20px;
+    background: var(--color-card-1);
+    border-radius: 7px;
+    padding: 10px;
+}
+.opt-list a {
+    background: transparent;
+    color: var(--color-font);
+    border-radius: 7px;
+    border: 0;
+    margin: 2px 0;
+}
+.opt-list a:nth-child(1) {
+    background: var(--color-main) !important;
+    color: var(--color-font-r) !important;
+    width: calc(100% + 20px);
+    border-radius: 7px 7px 0 0;
+    margin: -10px -10px 10px;
+}
+.opt-list a:hover {
+    background: var(--color-card-2);
+    color: var(--color-font);
+}
+.list-group-item.active {
+    background: var(--color-main) !important;
+    color: var(--color-font-r) !important;
+    border: 0 !important;
+}
+.list-group-item.active > svg {
+    fill: var(--color-font-r) !important;
+}
+.opt-list a > svg {
+    width: 1.3rem;
+    fill: var(--color-font);
+    margin-top: -2px;
+    margin-right: 10px;
+}
+
+.opt-body {
+    overflow: hidden;
+    padding: 20px;
+    scroll-behavior: smooth;
+    flex: 1;
+}
+.opt-body h4 {
+    margin-top: 60px;
+    margin-bottom: 20px;
+}
+.opt-body > div:nth-child(1) h4 {
+     margin-top: 0 !important;
+ }
+
+.opt-in-body {
+    height: calc(100vh - 200px - 2rem);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+.db-info > div {
+    background: var(--color-card-1);
+    margin-bottom: 20px;
+}
+.db-info > div:nth-child(2) {
+    width: 100%;
+    display: inline-block;
+    padding: 10px;
+    text-align: center;
+    border-radius: 7px;
+    min-height: 0;
+    color: #000;
+}
+.db-info > div:nth-child(3),
+.db-info > div:nth-child(4) {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+}
+.db-info > div:nth-child(3) > div:first-child,
+.db-info > div:nth-child(4) > div:first-child {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.db-info > div:nth-child(3) > div:first-child > span,
+.db-info > div:nth-child(4) > div:first-child > span {
+    font-size: 0.9rem;
+}
+.db-info > div:nth-child(3) > div:first-child > span:first-child,
+.db-info > div:nth-child(4) > div:first-child > span:first-child {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+.db-info > div:nth-child(3) > div:first-child > span:first-child span,
+.db-info > div:nth-child(4) > div:first-child > span:first-child span {
+    font-size: 1rem;
+    margin-left: 10px;
+    display: inline-block;
+    font-weight: normal;
+    color: var(--color-font-2);
+}
+.db-info > div:nth-child(3) > div:last-child,
+.db-info > div:nth-child(4) > div:last-child {
+    width: 5%;
+}
+
+.db-info > div:nth-child(3) > div:last-child svg,
+.db-info > div:nth-child(4) > div:last-child svg{
+    fill: var(--color-font-2);
+}
+
+.next-btn {
+    width: 30%;
+    margin-left: 50%;
+    transform: translate(-50%);
+}
+
+.user-card,
+.info-card {
+    background: var(--color-main);
+    color: var(--color-font-r);
+    align-items: center;
+    padding: 20px;
+    display: flex;
+    margin-bottom: 20px;
+}
+.info-card > div:nth-child(2) {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+.info-card > div:not(:nth-child(2)) {
+    background: #00000029;
+    padding: 1rem;
+    border-radius: 100%;
+}
+.info-card svg {
+    fill: var(--color-font-1-r);
+    width: 20px;
+}
+.info-card img {
+    width: 50px;
+    height: 50px;
+    margin: -20px;
+    border-radius: 7px;
+}
+.user-card > div:nth-child(1) {
+    width: 50px;
+    height: 50px;
+    border-radius: 50% !important;
+    margin-right: 10px;
+}
+.user-card span {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.option-card > div {
+    margin-bottom: 10px;
+    background: var(--color-card-1);
+    padding: 10px 20px !important;
+    display: flex;
+    align-items: stretch;
+}
+.option-card > div:hover > div:first-child {
+    transform: scaleY(1);
+}
+.option-card > div > div:first-child {
+    background: var(--color-main);
+    width: 5px;
+    margin-right: 15px;
+    border-radius: 5px;
+    transform: scaleY(0);
+    transition: transform 0.1s;
+}
+.option-card > div > div:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+}
+.option-card > div > div:nth-child(2) a {
+    font-weight: 500;
+    color: var(--color-font);
+}
+.option-card > div > div:nth-child(2) span {
+    font-size: 0.9rem;
+    color: var(--color-font-2);
+}
+.option-card > div > div:nth-child(3) {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+.option-card input[type=text] {
+    background: var(--color-card-2);
+    height: 35px;
+    border-radius: 7px;
+    padding: 0 10px;
+    font-size: 0.9rem;
+    border: 1px solid transparent;
+    transition: border 0.3s;
+}
+.option-card input[type=text]:focus {
+    border-color: var(--color-main);
+    outline: none;
+}
+.option-card label {
+    margin-bottom: 0;
+}
+.ss-switch > div {
+    background: var(--color-card-2);
+}
+
+.finish-card {
+    background: #d4edda;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10vh 0;
+}
+.finish-card div {
+    width: 3.5rem;
+    height: 3.5rem;
+    background: #15572436;
+    border-radius: 50%;
+}
+.finish-card div svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: 50%;
+    margin-left: 50%;
+    transform: translate(-50%, -50%);
+    fill: #155724;
+}
+.finish-card > span {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #155724;
+}
+
+.err-bar {
+    height: 2.1rem;
+    width: 0;
+    background: #f8d7da;
+    border-radius: 7px;
+    text-align: right;
+    overflow: hidden;
+    transition: width .6s;
+}
+.err-bar span {
+    line-height: 2.1rem;
+    color: #000;
+    margin-right: 10px;
+}

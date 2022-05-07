@@ -1,0 +1,86 @@
+.main-card {
+    margin-top: calc(50vh - 160px);
+    transition: margin-top .5s;
+}
+
+.info-card {
+    color: var(--color-font);
+    width: 30%;
+
+    transition: width .3s;
+}
+.info-card svg {
+    margin-bottom: 10px;
+    margin-top: 20px;
+    width: 50px;
+}
+.info-card #info {
+    color: var(--color-font-1);
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+.info-card #code {
+    color: var(--color-main);
+    font-size: 1.5rem;
+    font-weight: 300;
+}
+.info-card button {
+    background: var(--color-main);
+    color: var(--color-font-r);
+    font-size: 0.95rem;
+    border-radius: 7px;
+    padding: 5px 20px;
+    margin-top: 10px;
+    outline: none;
+    height: 35px;
+    width: 90%;
+    border: 0;
+}
+.info-card button:hover {
+    opacity: 0.9;
+}
+.info-card button:active {
+    opacity: 0.8;
+}
+.info-card button:focus {
+    outline: none;
+}
+
+.debug-card {
+    color: var(--color-font);
+    margin-bottom: 20px;
+    text-align: left;
+}
+.debug-card i {
+    font-size: 1.5rem;
+    font-style: normal;
+    color: var(--color-main);
+    font-weight: 200;
+}
+.debug-card span {
+    font-size: 0.7rem;
+    color: var(--color-font-1);
+    font-weight: 300;
+}
+.debug-card code {
+    font-size: 0.7rem;
+    color: var(--color-font-1);
+    font-weight: 300;
+}
+.debug-card code font {
+    font-weight: 300;
+}
+
+@media screen and (max-width: 1200px) {
+    .info-card {
+        width: 50%;
+    }
+}
+@media screen and (max-width: 576px) {
+    .info-card {
+        width: 100%;
+    }
+    .main-card {
+        margin-top: 0;
+    }
+}

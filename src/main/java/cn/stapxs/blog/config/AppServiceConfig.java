@@ -24,9 +24,15 @@ public class AppServiceConfig implements WebMvcConfigurer {
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         registry.jsp("/web/",".jsp");
-        registry.jsp("/web/err/",".jsp");
     }
+
     //配置静态资源处理
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/js/**").addResourceLocations("/web/js/");
+        registry.addResourceHandler("/css/**").addResourceLocations("/web/css/");
+        registry.addResourceHandler("/images/**").addResourceLocations("/web/images/");
+    }
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
