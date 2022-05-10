@@ -19,17 +19,21 @@
     <link rel="stylesheet" href="https://api.stapxs.cn/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://api.stapxs.cn/css/style.css">
     <link rel="stylesheet" href="/css/admin/user.css">
+    <link rel="stylesheet" href="/css/admin/main.css">
 
     <script>
+        if (!self.frameElement || self.frameElement.tagName !== "IFRAME") {
+            window.location.href = '/404';
+        }
         is_auto_dark = true
     </script>
 </head>
-<body style="margin-right: 6px;">
+<body style="margin-right: 6px;background: var(--color-card);">
 <div class="info-card">
     <div>
-        <img src="https://gravatar.loli.net/avatar/75c55a45cadac8669a1c5e4943cda5ce?s\u003d200">
-        <p>林小槐</p>
-        <span>Stapx Steve</span>
+        <img id="avatar">
+        <p id="nickname"></p>
+        <span id="username"></span>
     </div>
     <div class="option-card opt-card-r">
         <div class="ss-card">
@@ -40,7 +44,7 @@
             </div>
             <div>
                 <label>
-                    <input type="text">
+                    <input type="text" id="nick_input" data-name="userinfo-user_nick" onchange="updateBaseInfo(this)">
                 </label>
             </div>
         </div>
@@ -52,7 +56,7 @@
             </div>
             <div>
                 <label>
-                    <input type="text">
+                    <input type="text" id="link_input" data-name="userinfo-user_link" onchange="updateBaseInfo(this)">
                 </label>
             </div>
         </div>
@@ -60,11 +64,11 @@
             <div></div>
             <div>
                 <a>* 邮箱</a>
-                <span>邮箱是主要联系方式，会影响好多东西哦。</span>
+                <span>邮箱是主要联系方式！</span>
             </div>
             <div>
                 <label>
-                    <input type="text">
+                    <input type="text" id="mail_input" data-name="user-user_mail" onchange="updateBaseInfo(this)">
                 </label>
             </div>
         </div>
@@ -73,7 +77,7 @@
 <div class="opt-bar">
     <div></div>
     <span>撰写设置</span>
-    <button class="ss-button">保存</button>
+    <button class="ss-button" onclick="submitSetting(this)">保存</button>
 </div>
 <div class="option-card opt-card-r" style="margin-top: 10px;">
     <div class="ss-card">
@@ -84,7 +88,7 @@
         </div>
         <div>
             <label class="ss-switch">
-                <input type="checkbox">
+                <input type="checkbox" id="useMD" onchange="setJSONValue('userConfig', this.id, this.checked)">
                 <div><div></div></div>
             </label>
         </div>
@@ -97,7 +101,7 @@
         </div>
         <div>
             <label class="ss-switch">
-                <input type="checkbox">
+                <input type="checkbox" id="autoSave" onchange="setJSONValue('userConfig', this.id, this.checked)">
                 <div><div></div></div>
             </label>
         </div>
@@ -110,7 +114,7 @@
         </div>
         <div>
             <label class="ss-switch">
-                <input type="checkbox">
+                <input type="checkbox" id="dAllowQuote" onchange="setJSONValue('userConfig', this.id, this.checked)">
                 <div><div></div></div>
             </label>
         </div>
@@ -119,7 +123,7 @@
 <div class="opt-bar">
     <div></div>
     <span>修改密码</span>
-    <button class="ss-button">确认</button>
+    <button class="ss-button" id="changePwdAcc" onclick="changePassword(this)">确认</button>
 </div>
 <div class="option-card opt-card-r" style="margin-top: 10px;">
     <div class="ss-card">
@@ -130,7 +134,7 @@
         </div>
         <div>
             <label>
-                <input type="text">
+                <input type="password" id="new_password">
             </label>
         </div>
     </div>
@@ -142,7 +146,7 @@
         </div>
         <div>
             <label>
-                <input type="text">
+                <input type="password" id="new_password2">
             </label>
         </div>
     </div>
@@ -153,5 +157,7 @@
 <script src="https://api.stapxs.cn/bootstrap/bootstrap.min.js"></script>
 <script src="https://api.stapxs.cn/js/main.js"></script>
 <script src="https://api.stapxs.cn/js/auto-theme.js"></script>
+<script src="/js/admin/user.js"></script>
+<script src="https://api.stapxs.cn/js/util/jsencrypt.min.js"></script>
 </html>
 

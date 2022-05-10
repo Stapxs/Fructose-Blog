@@ -58,3 +58,6 @@ hs_err_pid*
 # more
 src/main/resources/*.properties
 !src/main/resources/log4j.properties
+
+# 这是 editor.md 的仓库依赖，为了不影响代码统计故不上传，请自行克隆补全
+src/main/webapp/web/editor

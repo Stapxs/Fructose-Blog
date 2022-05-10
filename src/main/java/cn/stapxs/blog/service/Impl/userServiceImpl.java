@@ -161,6 +161,51 @@ public class userServiceImpl implements UserService {
 
     /**
      * @Author Stapxs
+     * @Description 验证 token 有效性
+     * @Date 下午 09:42 2022/05/07
+     * @Param [id, token]
+     * @return boolean
+    **/
+    @Override
+    public boolean verifyLogin(int id, String token) {
+        // 获取用户
+        Optional<User> userOptional = Optional.ofNullable(user.getUserByID(id));
+        // 验证 token
+        return userOptional.filter(value -> token.equals(value.getUser_token())).isPresent();
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 验证管理员权限
+     * @Date 下午 08:58 2022/05/09
+     * @Param [id, token]
+     * @return boolean
+    **/
+    @Override
+    public boolean verifyAdministrator(int id, String token) {
+        // 获取用户
+        Optional<User> userOptional = Optional.ofNullable(user.getUserByID(id));
+        // 验证 token
+        if(userOptional.filter(value -> token.equals(value.getUser_token())).isPresent()) {
+            // 验证权限
+            return userOptional.get().getAccount_type() == 0;
+        }
+        return false;
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 更新用户
+     * @Date 下午 10:51 2022/05/07
+     * @Param [id, name, value]
+    **/
+    @Override
+    public void updateUser(int id, String name, String value) {
+        user.updateUser(id, name, value);
+    }
+
+    /**
+     * @Author Stapxs
      * @Description 获取用户信息
      * @Date 上午 11:06 2022/05/07
      * @Param [id]
@@ -174,5 +219,16 @@ public class userServiceImpl implements UserService {
             user.newUserInfo(id);
         }
         return userInfoOptional.orElse(new UserInfo(id));
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 更新用户信息
+     * @Date 下午 10:51 2022/05/07
+     * @Param [id, name, value]
+    **/
+    @Override
+    public void updateUserInfo(int id, String name, String value) {
+        user.updateUserInfo(id, name, value);
     }
 }

@@ -27,6 +27,7 @@
 .info-card > div:first-child span {
   font-size: 1rem;
   font-weight: 300;
+  color: var(--color-font);
 }
 .info-card > div:last-child {
   flex: 1;
@@ -37,101 +38,4 @@
 }
 .info-card > div:last-child input[type=text] {
   background: var(--color-card-2);
-}
-
-.option-card > div {
-  margin-bottom: 10px;
-  background: var(--color-card-1);
-  padding: 10px 20px !important;
-  display: flex;
-  align-items: stretch;
-}
-.option-card > div:hover > div:first-child {
-  transform: scaleY(0.6);
-}
-.option-card > div > div:first-child {
-  background: var(--color-main);
-  width: 5px;
-  margin-right: 15px;
-  border-radius: 5px;
-  transform: scaleY(0);
-  transition: transform 0.1s;
-}
-.option-card > div > div:nth-child(2) {
-  display: flex;
-  flex-direction: column;
-}
-.option-card > div > div:nth-child(2) a {
-  font-weight: 500;
-  color: var(--color-font);
-}
-.option-card > div > div:nth-child(2) span {
-  font-size: 0.9rem;
-  color: var(--color-font-2);
-}
-.option-card > div > div:nth-child(3) {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-}
-.option-card input[type=text] {
-  background: var(--color-card-2);
-  height: 35px;
-  border-radius: 7px;
-  padding: 0 10px;
-  font-size: 0.9rem;
-  border: 1px solid transparent;
-  transition: border 0.3s;
-}
-.option-card input[type=text]:focus {
-  border-color: var(--color-main);
-  outline: none;
-}
-.option-card label {
-  margin-bottom: 0;
-}
-.ss-switch > div {
-  background: var(--color-card-2);
-}
-
-.opt-card-r > div:first-child {
-  border-radius: 7px 7px 0 0;
-}
-.opt-card-r > div:last-child {
-  border-radius: 0 0 7px 7px;
-}
-.opt-card-r > div {
-  margin-bottom: 0;
-  border-radius: 0;
-}
-.opt-card-r > div:hover {
-  box-shadow: none;
-}
-
-.opt-bar {
-  margin-top: 20px;
-  background: var(--color-card-1);
-  text-align: left;
-  padding: 10px 15px;
-  border-radius: 7px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-.opt-bar div {
-  height: 1.2rem;
-  width: 5px;
-  background: var(--color-main);
-  border-radius: 5px;
-}
-.opt-bar span {
-  margin-left: 10px;
-  font-size: 1rem;
-  font-weight: normal;
-  flex: 1;
-}
-.opt-bar button {
-  padding: 0 30px;
 }

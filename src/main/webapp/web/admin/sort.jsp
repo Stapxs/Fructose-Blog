@@ -2,8 +2,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: Stapxs
-  Date: 2022/05/07
-  Time: 下午 04:38
+  Date: 2022/05/09
+  Time: 下午 07:08
   To change this template use File | Settings | File Templates.
 --%>
 <!DOCTYPE html>
@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://api.stapxs.cn/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="https://api.stapxs.cn/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://api.stapxs.cn/css/style.css">
-    <link rel="stylesheet" href="/css/admin/theme.css">
+    <link rel="stylesheet" href="/css/admin/sort.css">
     <link rel="stylesheet" href="/css/admin/main.css">
 
     <script>
@@ -26,22 +26,52 @@
     </script>
 </head>
 <body style="margin-right: 6px;background: var(--color-card);">
+
 <div class="opt-bar" style="margin-top: 0;">
     <div></div>
-    <span>主题列表</span>
-    <button class="ss-button">修改当前主题设置</button>
+    <span>分类标签列表</span>
 </div>
-<div class="theme-view">
-    <img src="/images/轻·果糖.png">
-    <div>
+<div class="sort-list" id="sort-list"></div>
+<div class="opt-bar" style="margin-top: 20px;">
+    <div></div>
+    <span>添加分类标签</span>
+    <button class="ss-button" id="sort-send" onclick="addSort()">添加</button>
+</div>
+<div class="option-card opt-card-r" style="margin-top: 10px;">
+    <div class="ss-card">
+        <div></div>
         <div>
-            <p>轻·果糖</p>
-            <span>是开袋即食的果糖博客官方主题，好吃又简单 ——</span>
-            <a>作者：果糖博客</a>
+            <a>* 分类名</a>
+            <span>分类的名字</span>
         </div>
         <div>
-            <button class="ss-button">预览主题</button>
-            <button class="ss-button">使用主题</button>
+            <label>
+                <input type="text" id="sort-title">
+            </label>
+        </div>
+    </div>
+    <div class="ss-card">
+        <div></div>
+        <div>
+            <a>* 分类简称</a>
+            <span>这个名字将用在分类页面的链接上，只能英文哦。</span>
+        </div>
+        <div>
+            <label>
+                <input type="text" id="sort-name">
+            </label>
+        </div>
+    </div>
+    <div class="ss-card">
+        <div></div>
+        <div>
+            <a>简介</a>
+            <span>主题可以选择把简介显示出来哦</span>
+        </div>
+        <div>
+            <label>
+                <textarea id="sort-mark"></textarea>
+            </label>
         </div>
     </div>
 </div>
@@ -51,5 +81,5 @@
 <script src="https://api.stapxs.cn/bootstrap/bootstrap.min.js"></script>
 <script src="https://api.stapxs.cn/js/main.js"></script>
 <script src="https://api.stapxs.cn/js/auto-theme.js"></script>
+<script src="/js/admin/sort.js"></script>
 </html>
-

@@ -23,8 +23,10 @@ import java.sql.SQLException;
 @AllArgsConstructor
 public class UserInfo {
     private int user_id;
-    private String user_nike;
+    private String user_nick;
+    private String user_link;
     private Blob user_avatar;
+    private String user_config;
 
     /**
      * @Author Stapxs

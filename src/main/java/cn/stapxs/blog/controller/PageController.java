@@ -90,6 +90,7 @@ public class PageController {
         // 其他数据
         configServiceImpl.SiteConfig siteInfo = config.getSiteConfig();
         model.addAttribute("siteName", siteInfo.getFb_name());
+        model.addAttribute("userInfo", info);
         // 返回
         return name.map(s -> "admin/" + s).orElse("admin/index");
     }

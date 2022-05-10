@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.crypto.BadPaddingException;
 import javax.servlet.http.HttpServletRequest;
@@ -47,9 +48,9 @@ public class accountController {
     ConfigService configService;
 
     // -------------------------------------------------
-    // 登录服务相关
+    // 安全服务相关
 
-    @GetMapping(value = "api/account/key/{name}", name = "获取登录需要的加密公钥")
+    @GetMapping(value = "api/account/key/{name}", name = "获取加密公钥")
     public String getLoginKey(@PathVariable String name, Model model) {
         try {
             Optional<User> user = Optional.ofNullable(userService.getUser(name));
@@ -67,7 +68,7 @@ public class accountController {
     }
 
     @PostMapping(value = "api/account/login", name = "登录")
-    public String loginAccount(int id, String str, HttpServletRequest request, Model model) {
+    public String loginAccount(int id, String str, Optional<Boolean> nd, HttpServletRequest request, Model model) {
         str = str.replace(" ", "+");
         Optional<User> user = Optional.ofNullable(userService.getUser(id));
         if(user.isPresent()) {
@@ -94,8 +95,10 @@ public class accountController {
             }
             // 后续流程
             if(passLogin) {
-                // 删除私钥
-                userService.delKey(user.get().getUser_id());
+                if(!nd.isPresent()) {
+                    // 删除私钥
+                    userService.delKey(user.get().getUser_id());
+                }
                 // 生成返回 token
                 Object back = new keyInfo(user.get().getUser_id(), user.get().createToken());
                 // 保存 token
@@ -161,10 +164,54 @@ public class accountController {
         }
     }
 
+    @PostMapping(value = "api/account/password", name = "修改密码")
+    public String changePassword(int id, String str, Model model) {
+        str = str.replace(" ", "+");
+        Optional<User> user = Optional.ofNullable(userService.getUser(id));
+        if(user.isPresent()) {
+            // 解码密码
+            try {
+                RSAEncrypt encrypt = new RSAEncrypt();
+                str = encrypt.decrypt(str, user.get().getLogin_key());
+                // 加密密码
+                PBKDF2 pbkdf2 = new PBKDF2(32, 64, 30000);
+                str = pbkdf2.getSaveStr(str);
+                // 修改密码
+                userService.updateUser(user.get().getUser_id(), "user_password", str);
+                // 删除 token
+                userService.updateUser(user.get().getUser_id(), "user_token", null);
+                // 删除私钥
+                userService.delKey(user.get().getUser_id());
+                // 返回
+                return View.api(200, "success", "修改成功", model);
+            } catch (BadPaddingException be) {
+                be.printStackTrace();
+                // RSA 解密失败
+                return View.api(400, "Bad Request", "解密失败", model);
+            } catch (NullPointerException ne) {
+                ne.printStackTrace();
+                // 未申请公钥
+                return View.api(403, "Forbidden", "无效的操作", model);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                // 其他错误
+                return View.api(500, "Internal Server Error", ex.getMessage(), model);
+            } finally {
+                // 删除私钥
+                userService.delKey(user.get().getUser_id());
+            }
+        } else {
+            // 删除私钥
+            userService.delKey(user.get().getUser_id());
+            // 用户不存在
+            return View.api(404, "Not Found", "用户不存在", model);
+        }
+    }
+
     // -------------------------------------------------
     // 用户信息相关
     @GetMapping(value = "api/account/avatar/{id}", name = "获取用户头像链接")
-    public String getUserAvatar(@PathVariable int id, HttpServletResponse response, Model model) throws IOException, SQLException {
+    public String getUserAvatar(@PathVariable int id, Model model) {
         // 此接口不需要用户认证
         Optional<UserInfo> userInfo = Optional.ofNullable(userService.getUserInfo(id));
         if (userInfo.isPresent()) {
@@ -204,6 +251,68 @@ public class accountController {
         } else {
             return View.api(404, "not found", "获取用户信息失败！", model);
         }
+    }
+
+    @PostMapping(value = "api/account/config/{id}", name = "获取用户设置档")
+    public String getUserConfig(@PathVariable int id, String token, Model model) {
+        // 验证登录
+        if(userService.verifyLogin(id, token)) {
+            // 获取用户设置档
+            UserInfo userInfo = userService.getUserInfo(id);
+            return View.api(200, "success", userInfo.getUser_config(), model);
+        }
+        return View.api(403, "Forbidden", "验证登录失效！", model);
+    }
+
+    @PostMapping(value = "api/account/info/{id}", name = "获取用户完整信息")
+    public String getUserInfo(@PathVariable int id, String token, Model model) {
+        // 验证登录
+        System.out.println(id + " / " + token);
+        if(userService.verifyLogin(id, token)) {
+            User user = userService.getUser(id);
+            UserInfo userInfo = userService.getUserInfo(id);
+            UserFullInfo userfullInfo = new UserFullInfo();
+            // 填充
+            userfullInfo.user_id = user.getUser_id();
+            userfullInfo.user_name = user.getUser_name();
+            userfullInfo.user_mail = user.getUser_mail();
+            userfullInfo.user_nick = userInfo.getUser_nick();
+            userfullInfo.user_link = userInfo.getUser_link();
+
+            userfullInfo.login_ip = user.getLogin_ip();
+            userfullInfo.reg_ip = user.getReg_ip();
+            // 返回
+            return View.api(200, "success", userfullInfo, model);
+        }
+        return View.api(403, "Forbidden", "验证登录失效！", model);
+    }
+
+    @PostMapping(value = "api/account/info/set/{name}/{id}", name = "设置用户信息")
+    public String setUserInfo(@PathVariable String name, @PathVariable int id, String token, String value, Model model) {
+        // 验证登录
+        if(userService.verifyLogin(id, token)) {
+            String[] names = name.split("-");
+            if(names[0].equals("user")) {
+                userService.updateUser(id, names[1], value);
+            } else {
+                userService.updateUserInfo(id, names[1], value);
+            }
+            return View.api(200, "success", "设置成功！", model);
+        } else {
+            return View.api(403, "Forbidden", "验证登录失效！", model);
+        }
+    }
+
+    @Data
+    static class UserFullInfo {
+        private int user_id;
+        private String user_name;
+        private String user_mail;
+        private String user_nick;
+        private String user_link;
+
+        private String login_ip;
+        private String reg_ip;
     }
 
     @Data

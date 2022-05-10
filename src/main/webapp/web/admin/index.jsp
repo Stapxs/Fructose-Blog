@@ -55,7 +55,7 @@
                     </button>
                     <div class="collapse" id="collapse-1">
                         <div class="lis-body">
-                            <div data-page="dashboard" onclick="addTab(this)">
+                            <div data-page="dashboard" onclick="addTab(this, true)">
                                 <div></div>
                                 <span>统计信息</span>
                                 <div style="flex: 1"></div>
@@ -81,13 +81,53 @@
                             </div>
                         </div>
                     </div>
+                    <button onclick="foldChange(this)" class="btn btn-primary lis-button" type="button" data-toggle="collapse" data-target="#collapse-2" aria-controls="collapse-2">
+                        <header><div style="transform: scaleY(0)"></div>文章</header>
+                        <svg style="transform: rotate(90deg);" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" class="svg-inline--fa fa-angle-right fa-w-8" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path fill="currentColor" d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"></path></svg>
+                    </button>
+                    <div class="collapse" id="collapse-2">
+                        <div class="lis-body">
+                            <div data-page="article" onclick="addTab(this, true)">
+                                <div></div>
+                                <span>新增文章</span>
+                                <div style="flex: 1"></div>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M118.6 105.4l128 127.1C252.9 239.6 256 247.8 256 255.1s-3.125 16.38-9.375 22.63l-128 127.1c-9.156 9.156-22.91 11.9-34.88 6.943S64 396.9 64 383.1V128c0-12.94 7.781-24.62 19.75-29.58S109.5 96.23 118.6 105.4z"/></svg>
+                            </div>
+                            <div data-page="new-page" onclick="addTab(this)">
+                                <div></div>
+                                <span>新增页面</span>
+                                <div style="flex: 1"></div>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M118.6 105.4l128 127.1C252.9 239.6 256 247.8 256 255.1s-3.125 16.38-9.375 22.63l-128 127.1c-9.156 9.156-22.91 11.9-34.88 6.943S64 396.9 64 383.1V128c0-12.94 7.781-24.62 19.75-29.58S109.5 96.23 118.6 105.4z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="foldChange(this)" class="btn btn-primary lis-button" type="button" data-toggle="collapse" data-target="#collapse-3" aria-controls="collapse-3">
+                        <header><div style="transform: scaleY(0)"></div>管理员</header>
+                        <svg style="transform: rotate(90deg);" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angle-right" class="svg-inline--fa fa-angle-right fa-w-8" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path fill="currentColor" d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"></path></svg>
+                    </button>
+                    <div class="collapse" id="collapse-3">
+                        <div class="lis-body">
+                            <div data-page="article_list" onclick="addTab(this)">
+                                <div></div>
+                                <span>管理文章</span>
+                                <div style="flex: 1"></div>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M118.6 105.4l128 127.1C252.9 239.6 256 247.8 256 255.1s-3.125 16.38-9.375 22.63l-128 127.1c-9.156 9.156-22.91 11.9-34.88 6.943S64 396.9 64 383.1V128c0-12.94 7.781-24.62 19.75-29.58S109.5 96.23 118.6 105.4z"/></svg>
+                            </div>
+                            <div data-page="sort" onclick="addTab(this)">
+                                <div></div>
+                                <span>管理分类</span>
+                                <div style="flex: 1"></div>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><path d="M118.6 105.4l128 127.1C252.9 239.6 256 247.8 256 255.1s-3.125 16.38-9.375 22.63l-128 127.1c-9.156 9.156-22.91 11.9-34.88 6.943S64 396.9 64 383.1V128c0-12.94 7.781-24.62 19.75-29.58S109.5 96.23 118.6 105.4z"/></svg>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="main-iframe ss-card">
                 <ul class="nav nav-tabs show-tab" id="myTab" role="tablist">
-                    <li class="nav-item" id="left-list-button" style="display: none">
-                        <a onclick="changeLeftList()" class="nav-link" style="background: var(--color-main);cursor: pointer;">
-                            <svg style="height: 1rem;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM64 256C64 238.3 78.33 224 96 224H480C497.7 224 512 238.3 512 256C512 273.7 497.7 288 480 288H96C78.33 288 64 273.7 64 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+                    <li class="nav-item" id="left-list-button" style="display: none;margin-right: 10px !important;">
+                        <a onclick="changeLeftList()" class="nav-link" style="padding: 5px 10px;background: var(--color-main);cursor: pointer;">
+                            <svg style="height: 1rem;fill: var(--color-font-r);" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM64 256C64 238.3 78.33 224 96 224H480C497.7 224 512 238.3 512 256C512 273.7 497.7 288 480 288H96C78.33 288 64 273.7 64 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
                         </a>
                     </li>
                     <li class="nav-item" id="tabp-welcome">

@@ -37,7 +37,11 @@
 
     <script>
         <%
-            if(back.isPresent()) out.print("get_back = '" + back.get() + "';");
+            if(back.isPresent()) {
+                out.print("get_back = '" + back.get() + "';");
+            } else {
+                out.print("get_back = null;");
+            }
         %>
         is_auto_dark = true;
     </script>
@@ -49,10 +53,10 @@
         <%-- Code Here …… --%>
         <div id="pan-main" class="main-pan">
             <div id="login-pan" class="login-box-1">
-                <div class="login-pan ss-card">
+                <div id="login-card" class="login-pan ss-card">
                     <div id="login-body" class="login-body-1">
                         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="fish" class="fish svg-inline--fa fa-fish fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M327.1 96c-89.97 0-168.54 54.77-212.27 101.63L27.5 131.58c-12.13-9.18-30.24.6-27.14 14.66L24.54 256 .35 365.77c-3.1 14.06 15.01 23.83 27.14 14.66l87.33-66.05C158.55 361.23 237.13 416 327.1 416 464.56 416 576 288 576 256S464.56 96 327.1 96zm87.43 184c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24 13.26 0 24 10.74 24 24 0 13.25-10.75 24-24 24z"></path></svg>
-                        <br><span class="main-title"><%=siteName%></span>
+                        <br><span id="main-title" class="main-title"><%=siteName%></span>
                         <form onsubmit="return loginAcc();">
                             <input id="inuname" style="margin-top: 30px;" type="text" class="form-control" placeholder="用户名" aria-label="用户名">
                             <input id="inupwd" type="password" class="form-control" placeholder="密码" aria-label="密码">
@@ -63,7 +67,7 @@
                         </form>
                         <%
                             if(allowReg) {
-                                out.print("<br><span class=\"no-acc\">没有账号？<a onclick=\"showRegPan();\">注册</a></span>");
+                                out.print("<br><span id='reg-in' class=\"no-acc\">没有账号？<a onclick=\"showRegPan();\">注册</a></span>");
                             }
                         %>
                         <label class="back-button" id="back-button">
@@ -101,7 +105,7 @@
         </div>
     </div>
 </div>
-<footer class="container-lg">
+<footer class="container-lg" id="footer">
     <div class="ss-card">
         <header>
             果糖博客

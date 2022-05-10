@@ -84,7 +84,7 @@
     <div class="container-lg" style="flex: 1;">
         <%-- Code Here …… --%>
         <div align="center" id="card-way" class="main-card" <%if(debug != null && (boolean) debug)out.print("style=\"margin-top: 0;\"");%>>
-            <div class="ss-card info-card" <%if(debug != null && (boolean) debug)out.print("style=\"display: none;\"");%>>
+            <div class="ss-card info-card" id="info-card" <%if(debug != null && (boolean) debug)out.print("style=\"display: none;\"");%>>
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="fish" class="svg-inline--fa fa-fish fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                     <path fill="currentColor"
                           d="<%=svg%>"
@@ -146,12 +146,15 @@
 </body>
 <script>
     // 判断是否在 iframe 内
-    if (self.frameElement && self.frameElement.tagName == "IFRAME") {
+    if (self.frameElement && self.frameElement.tagName === "IFRAME") {
         // 隐藏底栏
         document.getElementById("footer").style.display = "none";
         document.getElementById("card-way").style.marginTop = "calc(50vh - 140px)";
         // 隐藏返回按钮
         document.getElementById("back").style.display = "none";
+        // 修改颜色
+        document.body.style.background = "var(--color-card)"
+        document.getElementById("info-card").style.background = "var(--color-card-1)"
     }
 </script>
 <script src="https://api.stapxs.cn/js/util/jquery-1.12.4.js"></script>

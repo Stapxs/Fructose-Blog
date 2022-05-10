@@ -29,4 +29,8 @@ public interface UserMapper {
     boolean setToken(@Param("id")int id, @Param("token")String token);
     @Update("update fb_user set login_ip=#{ip} where user_id=#{id}")
     boolean setLoginIP(@Param("id")int id, @Param("ip")String ip);
+    @Update("update fb_user set ${name}=#{value} where user_id=#{id}")
+    void updateUser(@Param("id")int id, @Param("name")String name, @Param("value")String value);
+    @Update("update fb_userinfo set ${name}=#{value} where user_id=#{id}")
+    void updateUserInfo(@Param("id")int id, @Param("name")String name, @Param("value")String value);
 }

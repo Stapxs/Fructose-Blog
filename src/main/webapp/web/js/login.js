@@ -1,15 +1,29 @@
+// 判断是否在 iframe 内
+if (self.frameElement && self.frameElement.tagName === "IFRAME") {
+    document.getElementById("footer").style.display = "none";
+    document.getElementById("login-pan").style.width = "100%";
+    document.getElementById("login-pan").style.marginLeft = "50%";
+    document.getElementById("login-pan").style.transform = "translate(-50%)";
+    document.getElementById("pan-main").style.width = "100%";
+
+    document.body.style.background= "var(--color-card)";
+    document.getElementById("login-card").style.background= "var(--color-card-1)";
+    document.getElementById("inuname").style.background= "var(--color-card-2)";
+    document.getElementById("inupwd").style.background= "var(--color-card-2)";
+}
+// 设置显示状态
+if(getQueryVariable("action") && getQueryVariable("action") === "verify") {
+    // 填充用户名
+    document.getElementById("inuname").value = getCookie("name");
+    document.getElementById("reg-in").style.display = "none";
+}
+if(getQueryVariable("title")) {
+    document.getElementById("main-title").innerHTML = decodeURIComponent(getQueryVariable("title"));
+}
 // 获取 cookies
 const cookies = document.cookie.split('; ')
-let idIn = -1
-let tok = ''
-cookies.forEach(function (cookie) {
-    if(cookie.indexOf("id") >= 0) {
-        idIn = cookie.split('=')[1]
-    }
-    if(cookie.indexOf("token") >= 0) {
-        tok = cookie.split('=')[1]
-    }
-})
+let idIn = getCookie("id") == null ? -1 : getCookie("id");
+let tok = getCookie("token") == null ? "" : getCookie("token");
 // if(idIn !== -1 && tok !== '') {
 //     // 验证登录
 //     showErr(true, "加载中")
@@ -51,76 +65,84 @@ function loginAcc() {
         return false
     }
 
-    // 获取 key
-    fetch("/api/account/key/" + name)
-        .then(response => response.json())
-        .then(data => {
-            if(data.code === 200) {
-                const id = data.data.id
-                let key = data.data.key
-                key = "-----BEGIN PUBLIC KEY-----" + key + "-----END PUBLIC KEY-----"
-                // 加密密码
-                const encrypt = new JSEncrypt()
-                encrypt.setPublicKey(key)
-                const encrypted = encrypt.encrypt(pwd)
-                // 请求登录接口
-                try {
-                    const httpRequest = new XMLHttpRequest();
-                    httpRequest.open("POST", "api/account/login", true);
-                    httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    httpRequest.send("id=" + id + "&str=" + encrypted);
-
-                    httpRequest.onreadystatechange = function () {
-                        if (httpRequest.readyState === 4 && httpRequest.status === 200) {
-                            const json = JSON.parse(httpRequest.responseText)
-                            console.log("登陆成功")
-                            // 保存 cookie
-                            const exp = new Date();
-                            exp.setTime(exp.getTime() + 50 * 60 * 1000);
-                            document.cookie = "id=" + json.data.id + "; expires=" + exp.toGMTString() + "; path=/";
-                            document.cookie = "token=" + json.data.key + "; expires=" + exp.toGMTString() + "; path=/";
-                            // // 获取用户昵称
-                            // fetch("/acc/info/getNick/" + id)
-                            //     .then(response => response.json())
-                            //     .then(data => {
-                            //         if (data.message !== "没有找到这个账号！") {
-                            //             document.cookie = "name=" + data.message + "; expires=" + exp.toGMTString() + "; path=/";
-                            //         } else {
-                            //             document.cookie = "name=" + name + "; expires=" + exp.toGMTString() + "; path=/";
-                            //         }
-                            //     })
-                            //     .catch(function (e) {
-                            //         console.error(e)
-                            //         showErr(true, "获取信息失败！(1)")
-                            //     })
-                            // 跳转页面
-                            if (getQueryVariable("back") !== false) {
-                                window.location.href = "/" + getQueryVariable("back")
-                            } else if(get_back != undefined) {
-                                window.location.href = "/" + get_back
-                            } else {
-                                window.location.href = "/admin"
-                            }
-                        } else if (httpRequest.readyState === 4 && (
-                            Math.floor(httpRequest.status / 100) === 4 || Math.floor(httpRequest.status / 100) === 5)) {
-                            const json = JSON.parse(httpRequest.responseText)
-                            showErr(true, json.str)
-                        }
-                    };
-                } catch (e) {
-                    console.error(e)
-                    showErr(true, "登录失败！")
+    if(getQueryVariable("action") && getQueryVariable("action") === "verify") {
+        // URL 解码
+        let key = decodeURIComponent(getQueryVariable("notice"))
+        key = "-----BEGIN PUBLIC KEY-----" + key + "-----END PUBLIC KEY-----"
+        // 加密密码
+        const encrypt = new JSEncrypt()
+        encrypt.setPublicKey(key)
+        const encrypted = encrypt.encrypt(pwd)
+        login(getCookie("id"), name, encrypted)
+    } else {
+        // 获取 key
+        fetch("/api/account/key/" + name)
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    const id = data.data.id
+                    let key = data.data.key
+                    key = "-----BEGIN PUBLIC KEY-----" + key + "-----END PUBLIC KEY-----"
+                    // 加密密码
+                    const encrypt = new JSEncrypt()
+                    encrypt.setPublicKey(key)
+                    const encrypted = encrypt.encrypt(pwd)
+                    // 登录
+                    login(id, name, encrypted)
+                } else {
+                    showErr(true, "获取验证密钥失败！")
                 }
-            } else {
-                showErr(true, "获取验证密钥失败！")
-            }
-        })
-        .catch(function (e) {
-            console.error(e)
-            showErr(true, "请求验证密钥失败！")
-        })
-
+            })
+            .catch(function (e) {
+                console.error(e)
+                showErr(true, "请求验证密钥失败！")
+            })
+    }
     return false
+}
+
+function login(id, name, encrypted) {
+    // 请求登录接口
+    try {
+        const httpRequest = new XMLHttpRequest();
+        httpRequest.open("POST", "api/account/login", true);
+        httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        if(getQueryVariable("action") && getQueryVariable("action") === "verify") {
+            httpRequest.send("id=" + id + "&str=" + encrypted + "&nd=true");
+        } else {
+            httpRequest.send("id=" + id + "&str=" + encrypted);
+        }
+
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState === 4 && httpRequest.status === 200) {
+                const json = JSON.parse(httpRequest.responseText)
+                console.log("登陆成功")
+                // 保存 cookie
+                const exp = new Date();
+                exp.setTime(exp.getTime() + 50 * 60 * 1000);
+                document.cookie = "id=" + json.data.id + "; expires=" + exp.toGMTString() + "; path=/";
+                document.cookie = "token=" + json.data.key + "; expires=" + exp.toGMTString() + "; path=/";
+                document.cookie = "name=" + name + "; expires=" + exp.toGMTString() + "; path=/";
+                // 跳转页面
+                if (getQueryVariable("back") !== false) {
+                    // URL jiema
+                    const backUrl = decodeURIComponent(getQueryVariable("back"))
+                    window.location.href = "/" + backUrl
+                } else if(get_back != null) {
+                    window.location.href = "/" + get_back
+                } else {
+                    window.location.href = "/admin"
+                }
+            } else if (httpRequest.readyState === 4 && (
+                Math.floor(httpRequest.status / 100) === 4 || Math.floor(httpRequest.status / 100) === 5)) {
+                const json = JSON.parse(httpRequest.responseText)
+                showErr(true, json.str)
+            }
+        };
+    } catch (e) {
+        console.error(e)
+        showErr(true, "登录失败！")
+    }
 }
 
 // 注册账户
@@ -234,4 +256,18 @@ function backRegPan() {
 
     document.getElementById('back-button').style.display = 'none'
     document.getElementById('err-card').style.display = 'block'
+}
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }

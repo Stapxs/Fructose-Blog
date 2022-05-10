@@ -1,0 +1,198 @@
+.opt-bar {
+    margin-top: 20px;
+    background: var(--color-card-1);
+    text-align: left;
+    padding: 15px 20px;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: var(--color-font);
+}
+.opt-bar div {
+    height: 1.2rem;
+    width: 5px;
+    background: var(--color-main);
+    border-radius: 5px;
+}
+.opt-bar span {
+    margin-left: 10px;
+    font-size: 1rem;
+    font-weight: normal;
+    flex: 1;
+}
+.opt-bar label {
+    flex: 1;
+    margin-bottom: 0;
+}
+.opt-bar input {
+    width: 100%;
+    background: var(--color-card-2);
+    border-radius: 7px;
+    height: 40px;
+    padding: 0 15px;
+    transition: border-color .3s;
+    border: 1px solid transparent;
+}
+.opt-bar input:focus {
+    outline: none;
+    border: 1px solid var(--color-main);
+}
+.opt-bar button {
+    padding: 0 30px;
+}
+
+.module-box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+.module-box > div:first-child {
+    background: var(--color-card-2);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    opacity: 0.5;
+}
+.module-box > div:last-child {
+    z-index: 1;
+    position: absolute;
+    width: 50%;
+    min-height: 20px;
+    background: var(--color-bg);
+    padding: 20px;
+    border-radius: 7px;
+    margin: 10vh 0 0 50%;
+    transform: translateX(-50%);
+    color: var(--color-font-1);
+}
+
+@media screen and (max-width: 750px) {
+    .module-box > div:last-child {
+        width: 90%;
+    }
+}
+
+
+.option-card > div {
+    margin-bottom: 10px;
+    background: var(--color-card-1);
+    padding: 10px 20px !important;
+    display: flex;
+    align-items: stretch;
+}
+.option-card > div:hover > div:first-child {
+    transform: scaleY(0.6);
+}
+.option-card > div > div:first-child {
+    background: var(--color-main);
+    width: 5px;
+    margin-right: 15px;
+    border-radius: 5px;
+    transform: scaleY(0);
+    transition: transform 0.1s;
+}
+.option-card > div > div:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+}
+.option-card > div > div:nth-child(2) a {
+    font-weight: 500;
+    color: var(--color-font);
+}
+.option-card > div > div:nth-child(2) span {
+    font-size: 0.9rem;
+    color: var(--color-font-2);
+}
+.option-card > div > div:nth-child(3) {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+.option-card input[type=text],
+.option-card input[type=password],
+.option-card textarea,
+.option-card select {
+    background: var(--color-card-2);
+    height: 35px;
+    border-radius: 7px;
+    padding: 0 10px;
+    font-size: 0.9rem;
+    border: 1px solid transparent;
+    transition: border 0.3s;
+    width: 250px;
+    color: var(--color-font-1);
+}
+.option-card textarea {
+    min-height: 100px;
+}
+.option-card input[type=text]:focus {
+    border-color: var(--color-main);
+    outline: none;
+}
+.option-card label {
+    margin-bottom: 0;
+}
+.ss-switch > div {
+    background: var(--color-card-2);
+}
+
+.opt-bar-small {
+    background: var(--color-card-1);
+    border-radius: 7px;
+    padding: 10px 20px;
+    margin-top: 10px;
+}
+.opt-bar-small > div:first-child {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    margin-bottom: 10px;
+    color: var(--color-font);
+}
+.opt-bar-small > div:first-child > div {
+    width: 5px;
+    background: var(--color-main);
+    margin-right: 10px;
+    border-radius: 7px;
+    transform: scaleY(0.8);
+}
+.opt-bar-small textarea {
+    min-height: 100px !important;
+    padding: 10px !important;
+}
+
+.opt-bar-small textarea,
+.opt-bar-small input {
+    outline: 1px solid transparent;
+    transition: outline 0.3s;
+    background: var(--color-card-2);
+    border: 0;
+    border-radius: 7px;
+    min-width: 70px;
+    min-height: 40px;
+    padding: 0 10px;
+    width: 100%;
+}
+.opt-bar-small textarea:focus,
+.opt-bar-small input:focus {
+    outline: 1px solid var(--color-main);
+}
+
+.opt-card-r > div:first-child {
+    border-radius: 7px 7px 0 0;
+}
+.opt-card-r > div:last-child {
+    border-radius: 0 0 7px 7px;
+}
+.opt-card-r > div {
+    margin-bottom: 0;
+    border-radius: 0;
+}
+.opt-card-r > div:hover {
+    box-shadow: none;
+}

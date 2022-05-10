@@ -32,6 +32,7 @@ public class AppServiceConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/js/**").addResourceLocations("/web/js/");
         registry.addResourceHandler("/css/**").addResourceLocations("/web/css/");
         registry.addResourceHandler("/images/**").addResourceLocations("/web/images/");
+        registry.addResourceHandler("/editor/**").addResourceLocations("/web/editor/");
     }
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
