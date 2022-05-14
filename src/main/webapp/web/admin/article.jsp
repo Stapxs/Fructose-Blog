@@ -2,13 +2,7 @@
 <%@ page import="java.util.Calendar" %>
 <%@ page import="java.util.TimeZone" %>
 <%@ page import="java.text.DateFormat" %>
-<%@ page import="java.util.Date" %><%--
-  Created by IntelliJ IDEA.
-  User: Stapxs
-  Date: 2022/05/08
-  Time: 下午 07:17
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.util.Optional" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%--
   Created by IntelliJ IDEA.
@@ -36,9 +30,15 @@
 
     <script>
         is_auto_dark = true
+        <%
+        Optional<Object> value = Optional.ofNullable(request.getAttribute("value"));
+        if (value.isPresent() && value.get() != Optional.empty()) {
+            out.print("window.msgId = '" + value.get() + "';");
+        }
+        %>
     </script>
 </head>
-<body style="margin-right: 6px;background: var(--color-card);">
+<body style="margin-right: 6px;background: var(--color-card);" id="body">
 <div class="main">
     <div class="opt-bar" style="margin-top: 0;">
         <div></div>
@@ -58,9 +58,7 @@
                 <div></div>
                 <span>附加字段</span>
             </div>
-            <div class="add-opt">
-
-            </div>
+            <div class="add-opt option-card opt-card-r" id="add-opt-list"></div>
             <div class="opt-bar">
                 <div></div>
                 <span>操作</span>
@@ -121,8 +119,9 @@
                         <select id="public" style="color: var(--color-font-1);width: 100%;background: var(--color-card-2);border: 0;min-height: 35px;border-radius: 7px;padding: 0 10px;">
                             <option value="1">公开</option>
                             <option value="0">私密</option>
-                            <option value="2">密码保护</option>
+                            <option value="1">密码保护</option>
                             <option value="-1">待审核</option>
+                            <option value="-2" style="display: none">草稿</option>
                         </select>
                     </label>
                 </div>

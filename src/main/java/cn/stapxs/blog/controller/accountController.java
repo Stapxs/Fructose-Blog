@@ -1,5 +1,7 @@
 package cn.stapxs.blog.controller;
 
+import cn.stapxs.blog.model.Back;
+import cn.stapxs.blog.model.Config;
 import cn.stapxs.blog.model.user.User;
 import cn.stapxs.blog.model.user.UserInfo;
 import cn.stapxs.blog.service.ConfigService;
@@ -210,8 +212,8 @@ public class accountController {
 
     // -------------------------------------------------
     // 用户信息相关
-    @GetMapping(value = "api/account/avatar/{id}", name = "获取用户头像链接")
-    public String getUserAvatar(@PathVariable int id, Model model) {
+    @GetMapping(value = {"api/account/avatar/{id}", "api/account/avatar/{id}/{type}"}, name = "获取用户头像链接")
+    public String getUserAvatar(@PathVariable int id, @PathVariable Optional<String> type, HttpServletResponse response, Model model) throws IOException {
         // 此接口不需要用户认证
         Optional<UserInfo> userInfo = Optional.ofNullable(userService.getUserInfo(id));
         if (userInfo.isPresent()) {
@@ -229,15 +231,25 @@ public class accountController {
                                 , model);
                     } else {
                         // 其他情况尝试从 gravatar 获取
-                        configServiceImpl.SiteConfig siteConfig = configService.getSiteConfig();
+                        Config siteConfig = configService.getConfig();
                         String gravatarUrl = "https://www.gravatar.com/avatar/";
                         if (siteConfig.getImg_gravatar() != null) {
                             gravatarUrl = siteConfig.getImg_gravatar();
                         }
                         gravatarUrl = gravatarUrl + DigestUtils.md5Hex(mail.toLowerCase()) + "?s=200";
-                        return View.api(200, "success",
-                                new avatarInfo(false, gravatarUrl)
-                                , model);
+                        if(type.isPresent() && type.get().equals("url")){
+                            model.addAttribute("code", "200");
+                            model.addAttribute("str", gravatarUrl);
+                            return "api";
+                        } else if(type.isPresent() && type.get().equals("img")) {
+                            response.sendRedirect(gravatarUrl);
+                            return null;
+                        }
+                        else {
+                            return View.api(200, "success",
+                                    new avatarInfo(false, gravatarUrl)
+                                    , model);
+                        }
                     }
                 } else {
                     return View.api(404, "Not Found", "用户不存在", model);
@@ -262,6 +274,21 @@ public class accountController {
             return View.api(200, "success", userInfo.getUser_config(), model);
         }
         return View.api(403, "Forbidden", "验证登录失效！", model);
+    }
+
+    @GetMapping(value = "api/account/base/{id}", name = "获取用户基本信息")
+    public String getUserBase(@PathVariable int id, Model model) {
+        Optional<User> user = Optional.ofNullable(userService.getUser(id));
+        Optional<UserInfo> userInfo = Optional.ofNullable(userService.getUserInfo(id));
+        if(user.isPresent() && userInfo.isPresent()) {
+            UserFullInfo userfullInfo = new UserFullInfo();
+            userfullInfo.setUser_id(user.get().getUser_id());
+            userfullInfo.setUser_name(user.get().getUser_name());
+            userfullInfo.setUser_nick(userInfo.get().getUser_nick());
+            userfullInfo.setUser_link(userInfo.get().getUser_link());
+            return View.api(200, "success", userfullInfo, model);
+        }
+        return View.api(404, "not found", "获取用户信息失败！", model);
     }
 
     @PostMapping(value = "api/account/info/{id}", name = "获取用户完整信息")

@@ -7,4 +7,5 @@ public interface SortTagService {
     // Sort
     SortInfo[] getSortList();
     void addSort(SortInfo sortInfo);
+    void deleteSort(String name);
 }

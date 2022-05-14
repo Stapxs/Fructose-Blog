@@ -1,0 +1,11 @@
+{
+  "name": "Fructose-Lite",
+  "title": "轻·果糖",
+  "img": "轻·果糖.png",
+  "description": "是开袋即食的果糖博客官方主题，好吃又简单 ——",
+  "author": "林小槐",
+  "config": [
+    ["checkbox", "pin", "置顶", "置顶这条文章，最多置顶两个。"],
+    ["checkbox", "note", "设置为日记", "此篇文章将被显示成短句，同时正文部分将失效。"]
+  ]
+}

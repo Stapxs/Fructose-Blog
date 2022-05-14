@@ -10,10 +10,10 @@
 .theme-view img {
     max-height: 50vh;
     border-right: 7px;
+    margin-bottom: 10px;
 }
 .theme-view > div {
     width: 100%;
-    margin-top: 10px;
     display: flex;
     align-items: flex-end;
 }

@@ -1,9 +1,11 @@
 package cn.stapxs.blog.util;
 
 import cn.stapxs.blog.model.Back;
+import cn.stapxs.blog.model.Config;
 import cn.stapxs.blog.service.ConfigService;
 import cn.stapxs.blog.service.Impl.configServiceImpl;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 
@@ -16,7 +18,9 @@ import org.springframework.ui.Model;
  **/
 public class View {
 
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd HH:mm:ss")
+            .create();
 
     /**
      * @Author Stapxs
@@ -58,7 +62,7 @@ public class View {
      * @Param [siteInfo, back, model]
      * @return java.lang.String
     **/
-    public static String login(configServiceImpl.SiteConfig siteInfo, String back, Model model) {
+    public static String login(Config siteInfo, String back, Model model) {
         // 传递设置
         model.addAttribute("siteName", siteInfo.getFb_name());
         model.addAttribute("allowReg", siteInfo.isCfg_allow_reg());

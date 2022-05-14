@@ -74,6 +74,21 @@ public class SortTagController {
         }
     }
 
+    @PostMapping(value = "api/sort/delete", name = "删除分类")
+    public String deleteSort(String name, int id, String token, Model model) {
+        // 验证管理员身份
+        if(userService.verifyAdministrator(id, token)) {
+            try {
+                sortTagService.deleteSort(name);
+                return View.api(200, "success", "操作成功！", model);
+            } catch (Exception e) {
+                return View.api(500, "Internal Server Error", "操作失败！", model);
+            }
+        } else {
+            return View.api(403, "forbidden", "验证登录失败或无权限！", model);
+        }
+    }
+
     // --------------------------------------
 
     @Data

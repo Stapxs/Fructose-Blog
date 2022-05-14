@@ -35,4 +35,9 @@ public class sortTagServiceImpl implements SortTagService {
     public void addSort(SortInfo sortInfo) {
         mapper.addSort(sortInfo);
     }
+
+    @Override
+    public void deleteSort(String name) {
+        mapper.deleteSort(name);
+    }
 }

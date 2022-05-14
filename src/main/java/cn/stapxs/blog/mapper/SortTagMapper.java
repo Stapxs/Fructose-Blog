@@ -1,6 +1,7 @@
 package cn.stapxs.blog.mapper;
 
 import cn.stapxs.blog.model.SortInfo;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -13,5 +14,8 @@ public interface SortTagMapper {
 
     @Select("SELECT * FROM fb_sort")
     public SortInfo[] getSortTag();
+
+    @Delete("DELETE FROM fb_sort WHERE sort_name = #{sort_name}")
+    void deleteSort(String sort_name);
 
 }

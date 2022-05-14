@@ -65,7 +65,7 @@ function loginAcc() {
         return false
     }
 
-    if(getQueryVariable("action") && getQueryVariable("action") === "verify") {
+    if(getQueryVariable("notice")) {
         // URL 解码
         let key = decodeURIComponent(getQueryVariable("notice"))
         key = "-----BEGIN PUBLIC KEY-----" + key + "-----END PUBLIC KEY-----"
@@ -107,7 +107,7 @@ function login(id, name, encrypted) {
         const httpRequest = new XMLHttpRequest();
         httpRequest.open("POST", "api/account/login", true);
         httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        if(getQueryVariable("action") && getQueryVariable("action") === "verify") {
+        if(getQueryVariable("notice")) {
             httpRequest.send("id=" + id + "&str=" + encrypted + "&nd=true");
         } else {
             httpRequest.send("id=" + id + "&str=" + encrypted);

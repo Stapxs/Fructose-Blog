@@ -43,10 +43,7 @@ html, body {
 }
 
 .add-opt {
-    flex: 1;
     border-radius: 7px;
-    background: var(--color-card-1);
-    padding: 20px;
     margin-top: 10px;
 }
 

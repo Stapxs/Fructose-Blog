@@ -31,25 +31,13 @@
     <span>主题列表</span>
     <button class="ss-button">修改当前主题设置</button>
 </div>
-<div class="theme-view">
-    <img src="/images/轻·果糖.png">
-    <div>
-        <div>
-            <p>轻·果糖</p>
-            <span>是开袋即食的果糖博客官方主题，好吃又简单 ——</span>
-            <a>作者：果糖博客</a>
-        </div>
-        <div>
-            <button class="ss-button">预览主题</button>
-            <button class="ss-button">使用主题</button>
-        </div>
-    </div>
-</div>
+<div id="theme-list"></div>
 </body>
 <script src="https://api.stapxs.cn/js/util/jquery-1.12.4.js"></script>
 <script src="https://api.stapxs.cn/bootstrap/popper.min.js"></script>
 <script src="https://api.stapxs.cn/bootstrap/bootstrap.min.js"></script>
 <script src="https://api.stapxs.cn/js/main.js"></script>
 <script src="https://api.stapxs.cn/js/auto-theme.js"></script>
+<script src="/js/admin/theme.js"></script>
 </html>
 

@@ -2,6 +2,7 @@ package cn.stapxs.blog.service.Impl;
 
 import cn.stapxs.blog.config.JdbcConfig;
 import cn.stapxs.blog.mapper.ConfigMapper;
+import cn.stapxs.blog.model.Config;
 import cn.stapxs.blog.service.ConfigService;
 import cn.stapxs.blog.util.Str;
 import lombok.Builder;
@@ -32,6 +33,21 @@ public class configServiceImpl implements ConfigService {
     ApplicationContext appContext;
     @Autowired
     ConfigMapper config;
+
+    @Override
+    public Config getConfig() {
+        return config.getConfig();
+    }
+
+    @Override
+    public void updateStringConfig(String name, String value) {
+        config.updateStringConfig(name, value);
+    }
+
+    @Override
+    public String getStringConfig(String name) {
+        return config.getStringConfig(name);
+    }
 
     /**
      * @Author Stapxs
@@ -167,18 +183,6 @@ public class configServiceImpl implements ConfigService {
     @Override
     public void updateSiteConfig(SiteConfig siteConfig) {
         config.updateSiteConfig(siteConfig);
-    }
-
-    /*
-     * @Author Stapxs
-     * @Description 获取站点设置
-     * @Date 下午 12:20 2022/05/06
-     * @Param []
-     * @return cn.stapxs.blog.service.Impl.configServiceImpl.SiteConfig
-    **/
-    @Override
-    public SiteConfig getSiteConfig() {
-        return config.getSiteConfig();
     }
 
     // -------------------------------------------------
