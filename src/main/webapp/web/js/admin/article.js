@@ -58,6 +58,12 @@ $(function() {
         editorTheme : 'pastel-on-dark',
         watch : false,
         saveHTMLToTextarea : true,
+        htmlDecode : "style|on*",
+        tex: true,
+        imageName: "uploadFile",
+        imageUpload : true,
+        imageFormats : ["jpg", "jpeg", "gif", "png"],
+        imageUploadURL : "/api/article/img/upload?id=" + getCookie("id") + "&token=" + getCookie("token"),
         toolbarIcons : function() {
             return ["undo", "redo", "|",
                 "bold", "del", "italic", "quote", "|",
@@ -93,7 +99,7 @@ $(function() {
             if(window.msgId !== undefined && window.msgId !== null) {
                 const id = window.msgId;
                 // 获取文章信息
-                fetch(`/api/article/${id}/md`)
+                fetch(`/api/article/get/${id}/md`)
                     .then(res => res.json())
                     .then(data => {
                         if (data.code === 200) {
@@ -299,7 +305,9 @@ function updateOption(sender, str) {
     dataOpt.art_sort = [];
     if(document.getElementById("sort-list").children.length > 0) {
         for(let i = 0; i < document.getElementById("sort-list").children.length; i++) {
-            dataOpt.art_sort.push(document.getElementById("sort-list").children[i].dataset.name);
+            if(document.getElementById("sort-list").children[i].getElementsByTagName("input")[0].checked) {
+                dataOpt.art_sort.push(document.getElementById("sort-list").children[i].dataset.name);
+            }
         }
     }
     dataOpt.art_tag = [];

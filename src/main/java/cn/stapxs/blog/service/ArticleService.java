@@ -2,6 +2,7 @@ package cn.stapxs.blog.service;
 
 import cn.stapxs.blog.controller.ArticleController;
 import cn.stapxs.blog.model.Article;
+import cn.stapxs.blog.model.FileInfo;
 
 import java.util.List;
 
@@ -15,8 +16,14 @@ public interface ArticleService {
     void updateArticleHtml(String artId, String html);
     void updateArticleOption(String artId, ArticleController.OptionInfo optionInfo);
 
+    void saveArticleImg(FileInfo fileInfo);
+    void deleteArticleImg(String name);
+
     String getIDByLink(String link);
+    int getArticleCount();
     List<Article> getArticleSummaryList();
+    List<Article> getArticleSummaryList(int page);
     Article getArticle(String artId);
+    List<FileInfo> getArticleFileList();
 
 }

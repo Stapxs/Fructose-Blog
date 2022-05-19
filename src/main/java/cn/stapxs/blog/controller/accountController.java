@@ -121,6 +121,20 @@ public class accountController {
         }
     }
 
+    @PostMapping(value = "api/account/verify", name = "验证登录")
+    public String verifyLogin(int id, String str, Model model) {
+        try {
+            if (userService.verifyLogin(id, str)) {
+                return View.api(200, "success", "登陆状态有效！", model);
+            } else {
+                return View.api(403, "Forbidden", "登陆状态无效！", model);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return View.api(500, "Internal Server Error", ex.getMessage(), model);
+        }
+    }
+
     @PostMapping(value = "api/account/register", name = "注册")
     public String registerAccount(String name, String email, String password, HttpServletRequest request, Model model) {
         try {

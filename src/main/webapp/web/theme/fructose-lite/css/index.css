@@ -1,6 +1,10 @@
 html, body {
     height: 100%;
 }
+html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
 body {
     background: var(--color-bg);
     height: 100%;
@@ -10,6 +14,17 @@ body {
 
 .body {
     flex: 1;
+}
+
+.nav-bar {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 0 5px var(--color-shader);
+    margin-top: 20px;
+    border-radius: 7px;
+    background: var(--color-card);
+    margin-bottom: 20px;
 }
 
 .top-bar {
@@ -49,6 +64,12 @@ body {
     font-size: 1rem;
     color: var(--color-font-1);
 }
+@media (max-width: 992px) {
+    .nav-bar {
+        margin-top: 0;
+        border-radius: 0;
+    }
+}
 
 .pin {
     overflow: hidden;
@@ -60,7 +81,7 @@ body {
 .pin::-webkit-scrollbar {
     height: 0;
 }
-.pin > div:hover > img {
+.pin > div:hover .pin-img {
     transform: translate(0);
 }
 .pin > div {
@@ -72,14 +93,15 @@ body {
     margin-right: 20px;
     overflow: hidden;
 }
-.pin > div > img {
+.pin-img {
     height: 100%;
     border-radius: 7px 50% 50% 7px;
-    background: var(--color-card-2);
     min-width: 180px;
     max-width: 180px;
     transform: translate(-20px);
     transition: transform 0.3s;
+    background-size: auto 100% !important;
+    background-position: 75%!important;
 }
 .pin > div > div {
     flex: 1;
@@ -97,7 +119,7 @@ body {
     margin-right: 10px;
     fill: var(--color-font-1);
 }
-.pin >div > div > div {
+.pin > div > div > div {
     padding: 0;
     height: 4.9rem;
     margin-bottom: 10px;
@@ -146,6 +168,7 @@ body {
     border-radius: 7px;
     background: var(--color-main);
     margin: calc(5vh / 2);
+    background: var(--color-card-2);
 }
 .art-body > div:first-child div {
     height: 35vh;
@@ -153,6 +176,7 @@ body {
     background: var(--color-card-2);
     border-radius: 7px;
     transition: all .3s;
+    background-color: var(--color-card) !important;
 }
 .art-body > div:last-child {
     color: var(--color-font);
@@ -259,6 +283,9 @@ body {
 .say-body > div:nth-child(2) span:first-child {
     color: var(--color-font-1);
     flex: 1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 .say-body > div:nth-child(2) span:first-child span {
     margin-right: 0;
@@ -271,4 +298,59 @@ body {
     border-radius: 50%;
     border: 2px solid var(--color-main);
     outline: 6px solid var(--color-card-2);
+}
+
+.controller {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+.controller button {
+    width: 40px;
+    height: 40px;
+    background: var(--color-card);
+    transition: background .3s;
+    padding: 15px;
+}
+.controller button:hover {
+    background: var(--color-main);
+}
+.controller button:hover svg {
+    fill: var(--color-font-r);
+}
+.controller button > svg {
+    margin-top: -15px;
+    fill: var(--color-font-1);
+}
+.controller > div {
+    background: var(--color-card);
+    border-radius: 7px;
+    height: 40px;
+    padding: 0 40px;
+    margin: 0 10px;
+    line-height: 40px;
+    font-weight: bold;
+    color: var(--color-font);
+}
+
+@media (max-width: 992px) {
+    .pin {
+        flex-wrap: wrap;
+    }
+    .pin > div {
+        min-width: 100%;
+        margin-bottom: 10px;
+    }
+    .top-bar {
+        background-size: auto, 100%;
+    }
+}
+@media (max-width: 768px) {
+    .art-body > div:first-child {
+        display: none;
+    }
+    .art-body > div:last-child {
+        margin-left: 40px;
+    }
 }

@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="/editor/css/editormd.min.css"/>
     <link rel="stylesheet" href="/css/admin/article.css">
     <link rel="stylesheet" href="/css/admin/main.css">
+    <link rel="stylesheet" href="/css/editer.css">
 
 
     <script>
@@ -144,6 +145,6 @@
 <script src="https://api.stapxs.cn/bootstrap/bootstrap.min.js"></script>
 <script src="https://api.stapxs.cn/js/main.js"></script>
 <script src="https://api.stapxs.cn/js/auto-theme.js"></script>
-<script src="/editor/editormd.min.js"></script>
+<script src="/editor/editormd.js"></script>
 <script src="/js/admin/article.js"></script>
 </html>

@@ -3,6 +3,7 @@ package cn.stapxs.blog.controller;
 import cn.stapxs.blog.model.Article;
 import cn.stapxs.blog.model.Config;
 import cn.stapxs.blog.model.user.User;
+import cn.stapxs.blog.model.user.UserInfo;
 import cn.stapxs.blog.service.ArticleService;
 import cn.stapxs.blog.service.ConfigService;
 import cn.stapxs.blog.service.Impl.configServiceImpl;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -41,9 +43,8 @@ public class PageController {
     SortTagService sortTag;
 
     // 主页配置页索引
-    @RequestMapping(value = {"/", "/config"})
-    public String index(Model model) {
-        System.out.println(config.getConfigStatue());
+    @RequestMapping(value = {"/", "/page/{page}"})
+    public String index(@PathVariable Optional<Integer> page, Model model) {
         if(config.getConfigStatue() == 0) {
             // 生成临时 token
 //            String token = config.createToken();
@@ -61,12 +62,23 @@ public class PageController {
 //            }
             return "404";
         } else {
+            if(!page.isPresent()) { page = Optional.of(1); }
             // 跳转到主页, 主页需要传递站点设置，文章列表，分类列表，附加设置
             Optional<Config> configInfo = Optional.ofNullable(config.getConfig());
+            List<Article> allArticleList = article.getArticleSummaryList();
+            List<Article> articleList = article.getArticleSummaryList((page.get() - 1) * 5);
+            int articleCount = article.getArticleCount();
+            if(articleList.size() == 0) {
+                // 重定向到第一页
+                return "redirect:/page/" + (int)Math.ceil(articleCount / 5.0);
+            }
             if(configInfo.isPresent() && configInfo.get().getCfg_theme() != null) {
                 model.addAttribute("config", configInfo.get());
-                model.addAttribute("articles", article.getArticleSummaryList());
+                model.addAttribute("articles", allArticleList);
+                model.addAttribute("now-page-articles", articleList);
                 model.addAttribute("sort", sortTag.getSortList());
+                model.addAttribute("page", page.get());
+                model.addAttribute("max-page", (int)Math.ceil(articleCount / 5.0));
                 // TODO tag 还没写
                 return "theme/" + configInfo.get().getCfg_theme() + "/index";
             } else {
@@ -81,8 +93,10 @@ public class PageController {
         // 根据链接获取文章信息
         Optional<Article> articleInfo = Optional.ofNullable(article.getArticle(article.getIDByLink(link)));
         if(articleInfo.isPresent()) {
-            Optional<User> userInfo = Optional.ofNullable(user.getUser(articleInfo.get().getUser_id()));
+            Optional<UserInfo> userInfo = Optional.ofNullable(user.getUserInfo(articleInfo.get().getUser_id()));
             if (userInfo.isPresent()) {
+                model.addAttribute("config", config.getConfig());
+                model.addAttribute("sort", sortTag.getSortList());
                 model.addAttribute("article", articleInfo.get());
                 model.addAttribute("user", userInfo.get());
                 return "theme/" + config.getConfig().getCfg_theme() + "/article";

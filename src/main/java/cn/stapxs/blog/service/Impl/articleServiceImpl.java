@@ -3,6 +3,7 @@ package cn.stapxs.blog.service.Impl;
 import cn.stapxs.blog.controller.ArticleController;
 import cn.stapxs.blog.mapper.ArticleMapper;
 import cn.stapxs.blog.model.Article;
+import cn.stapxs.blog.model.FileInfo;
 import cn.stapxs.blog.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -101,6 +102,30 @@ public class articleServiceImpl implements ArticleService {
 
     /**
      * @Author Stapxs
+     * @Description 保存文章图片
+     * @Date 下午 02:56 2022/05/15
+     * @Param [fileInfo]
+     * @return void
+    **/
+    @Override
+    public void saveArticleImg(FileInfo fileInfo) {
+        articleMapper.saveArticleImg(fileInfo);
+    }
+
+    /**
+     * @Author Stapxs
+     * @Description 删除文章图片
+     * @Date 下午 04:03 2022/05/16
+     * @Param [name]
+     * @return void
+    **/
+    @Override
+    public void deleteArticleImg(String name) {
+        articleMapper.deleteArticleImg(name);
+    }
+
+    /**
+     * @Author Stapxs
      * @Description 使用链接获取 ID
      * @Date 下午 03:12 2022/05/14
      * @Param [link]
@@ -109,6 +134,11 @@ public class articleServiceImpl implements ArticleService {
     @Override
     public String getIDByLink(String link) {
         return articleMapper.getIDByLink(link);
+    }
+
+    @Override
+    public int getArticleCount() {
+        return articleMapper.getArticleCount();
     }
 
     /**
@@ -123,6 +153,12 @@ public class articleServiceImpl implements ArticleService {
         return articleMapper.getArticleSummaryList();
     }
 
+    // 分页
+    @Override
+    public List<Article> getArticleSummaryList(int num) {
+        return articleMapper.getArticleSummaryListPage(num);
+    }
+
     /**
      * @Author Stapxs
      * @Description 获取文章详情
@@ -133,5 +169,10 @@ public class articleServiceImpl implements ArticleService {
     @Override
     public Article getArticle(String artId) {
         return articleMapper.getArticleById(artId);
+    }
+
+    @Override
+    public List<FileInfo> getArticleFileList() {
+        return articleMapper.getArticleFileList();
     }
 }

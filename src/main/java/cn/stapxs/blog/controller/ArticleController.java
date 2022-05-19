@@ -1,6 +1,7 @@
 package cn.stapxs.blog.controller;
 
 import cn.stapxs.blog.model.Article;
+import cn.stapxs.blog.model.FileInfo;
 import cn.stapxs.blog.model.user.User;
 import cn.stapxs.blog.model.user.UserInfo;
 import cn.stapxs.blog.service.ArticleService;
@@ -13,12 +14,14 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -163,8 +166,8 @@ public class ArticleController {
     }
 
 
-    @GetMapping(value = "api/article/list", name = "获取所有文章基本信息")
-    public String getArticleList(Model model) {
+    @GetMapping(value = {"api/article/list", "api/article/list/{sort}"}, name = "获取所有文章基本信息")
+    public String getArticleList(@PathVariable Optional<String> sort, Model model) {
         try {
             Optional<List<Article>> article = Optional.ofNullable(articleService.getArticleSummaryList());
             if (article.isPresent()) {
@@ -188,8 +191,17 @@ public class ArticleController {
                         articleSummaryInfo.setUser_nick(userInfo.get().getUser_nick());
                         articleSummaryInfo.setUser_link(userInfo.get().getUser_link());
                         articleSummaryInfo.setArticle(a);
-                        // 添加
-                        articleSummaryInfoList.add(articleSummaryInfo);
+                        // 添加，只包括公开的文章
+                        if(a.getArt_statue() == 1) {
+                            // 如果 sort 不是空，则仅包含含有 sort 的文章
+                            if (sort.isPresent()) {
+                                if (a.getArt_sort().equals(sort.get())) {
+                                    articleSummaryInfoList.add(articleSummaryInfo);
+                                }
+                            } else {
+                                articleSummaryInfoList.add(articleSummaryInfo);
+                            }
+                        }
                     } else {
                         return View.api(500, "Internal Server Error", "获取用户信息失败！", model);
                     }
@@ -204,7 +216,7 @@ public class ArticleController {
         }
     }
 
-    @GetMapping(value = {"api/article/{id}", "api/article/{id}/{option}"}, name = "获取完整文章信息")
+    @GetMapping(value = {"api/article/get/{id}", "api/article/get/{id}/{option}"}, name = "获取完整文章信息")
     public String getArticle(@PathVariable("id") String id, @PathVariable("option") Optional<String> option, Model model) {
         try {
             Optional<Article> article = Optional.ofNullable(articleService.getArticle(id));
@@ -227,41 +239,29 @@ public class ArticleController {
         }
     }
 
-    @GetMapping(value = {"api/article/img/{id}", "/api/article/img/{id}/{type}"}, name = "获取文章第一张图片")
+    @GetMapping(value = {"api/article/img/get/{id}", "/api/article/img/get/{id}/{type}"}, name = "获取文章第一张图片")
     public String getArtImg(@PathVariable("id") String id, @PathVariable Optional<String> type, HttpServletResponse response, Model model) {
         try {
             Optional<Article> article = Optional.ofNullable(articleService.getArticle(id));
             if(article.isPresent()) {
                 String art_html = article.get().getArt_html();
+                // URL 解码
+                art_html = URLDecoder.decode(art_html, "UTF-8");
                 // 获取第一个 img 标签的 src 属性
                 String imgSrc = art_html.split("<img")[1].split("src=\"")[1].split("\"")[0];
-                if(imgSrc.startsWith("http")) {
-                    if(type.isPresent()) {
-                        if(type.get().equals("img")) {
-                            response.sendRedirect(imgSrc);
-                            return null;
-                        } else if(type.get().equals("url")) {
-                            model.addAttribute("code", "200");
-                            model.addAttribute("str", imgSrc);
-                            return "api";
-                        } else {
-                            return View.api(200, "success", imgSrc, model);
-                        }
+                if (type.isPresent()) {
+                    if (type.get().equals("img")) {
+                        response.sendRedirect(imgSrc);
+                        return null;
+                    } else if (type.get().equals("url")) {
+                        model.addAttribute("code", "200");
+                        model.addAttribute("str", imgSrc);
+                        return "api";
                     } else {
                         return View.api(200, "success", imgSrc, model);
                     }
                 } else {
-                    if(type.isPresent()) {
-                        if (type.get().equals("url") || type.get().equals("img")) {
-                            model.addAttribute("code", "404");
-                            model.addAttribute("str", "");
-                            return "api";
-                        } else {
-                            return View.api(404, "Not Found", "没有找到图片！", model);
-                        }
-                    } else {
-                        return View.api(404, "Not Found", "没有找到图片！", model);
-                    }
+                    return View.api(200, "success", imgSrc, model);
                 }
             } else {
                 return View.api(404, "Not Found", "没有找到这篇文章！", model);
@@ -269,6 +269,92 @@ public class ArticleController {
         } catch (Exception e) {
             e.printStackTrace();
             return View.api(500, "Internal Server Error", e.getMessage(), model);
+        }
+    }
+
+    // --------------------------------------
+
+    @PostMapping(value = "api/article/img/upload", name = "上传文章图片")
+    public String uploadArtImg(int id, String token, @RequestParam("uploadFile") MultipartFile uploadFile, HttpSession session, Model model) {
+        try {
+            // 验证登录
+            if (userService.verifyLogin(id, token)) {
+                // 文件为空
+                if (uploadFile.isEmpty()) {
+                    model.addAttribute("code", "403");
+                    model.addAttribute("str", "{\"success\":0,\"message\":\"请上传文件。\"}");
+                    return "api";
+                }
+                // 保存文件
+                String basePath = session.getServletContext().getRealPath("/") + "web/images/upload/";
+
+                Calendar calendar = Calendar.getInstance();
+                String year = calendar.get(Calendar.YEAR) + "";
+                String month = calendar.get(Calendar.MONTH) + "";
+                String uploadTargetPath = basePath + year + month + "/";
+
+                String originalFileName = uploadFile.getOriginalFilename();
+                String fileType = originalFileName.substring(originalFileName.indexOf(".") + 1);
+                String newFileName = UUID.randomUUID() + "." + fileType;
+                File targetFile = new File(uploadTargetPath, newFileName);
+
+                if (!targetFile.exists()) {
+                    new File(uploadTargetPath).mkdirs();
+                }
+
+                // 保存图片信息
+                FileInfo fileInfo = new FileInfo();
+                fileInfo.setUser_id(id);
+                fileInfo.setFile_name(originalFileName);
+                fileInfo.setFile_size(uploadFile.getSize());
+                fileInfo.setFile_url("/images/upload/" + year + month + "/" + newFileName);
+                articleService.saveArticleImg(fileInfo);
+                // 移动图片
+                uploadFile.transferTo(targetFile);
+                // 返回
+                model.addAttribute("code", "200");
+                model.addAttribute("str", "{\"success\":1,\"message\":\"保存成功!\",\"url\":\"/images/upload/" + year + month + "/" + newFileName + "\"}");
+                return "api";
+            } else {
+                model.addAttribute("code", "403");
+                model.addAttribute("str", "{\"success\":0,\"message\":\"验证登陆失败！\"}");
+                return "api";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("code", "500");
+            model.addAttribute("str", "{\"success\":0,\"message\":\"" + e.getMessage() + "\"}");
+            return "api";
+        }
+    }
+
+    @GetMapping(value = "api/article/img/list", name = "获取文件列表")
+    public String getArtImgList(Model model) {
+        try {
+            Optional<List<FileInfo>> files = Optional.ofNullable(articleService.getArticleFileList());
+            if (files.isPresent()) {
+                return View.api(200, "success", files, model);
+            } else {
+                return View.api(404, "Not Found", "没有文件！", model);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return View.api(500, "Internal Server Error", e.getMessage(), model);
+        }
+    }
+
+    @PostMapping(value = "api/article/img/delete", name = "删除文件")
+    public String deleteArtImg(int id, String token, String name, Model model) {
+        try {
+            // 验证管理员权限
+            if (userService.verifyAdministrator(id, token)) {
+                articleService.deleteArticleImg(name);
+                return View.api(200, "success", "操作成功！", model);
+            } else {
+                return View.api(403, "Forbidden", "验证登陆失败或没有权限！", model);
+            }
+        } catch (Exception ex) {
+            return View.api(500, "Internal Server Error", ex.getMessage(), model);
         }
     }
 
@@ -294,4 +380,5 @@ public class ArticleController {
         private Article article;
         private String art;
     }
+
 }

@@ -14,8 +14,11 @@
 --%>
 <%
     Config configInfo = (Config) request.getAttribute("config");
-    List<Article> articles = (List<Article>) request.getAttribute("articles");
+    List<Article> allArticles = (List<Article>) request.getAttribute("articles");
+    List<Article> articles = (List<Article>) request.getAttribute("now-page-articles");
     SortInfo[] sorts = (SortInfo[]) request.getAttribute("sort");
+    int page_num = (int) request.getAttribute("page");
+    int max_page = (int) request.getAttribute("max-page");
 %>
 <!DOCTYPE html>
 <html prefix="og: https://ogp.me/ns#">
@@ -45,7 +48,7 @@
 </head>
 
 <body>
-<nav class="container-lg navbar navbar-expand-lg navbar-dark fixed-top" style="box-shadow: 0px 0px 5px var(--color-shader);margin-top: 20px;border-radius: 7px;background: var(--color-card);margin-bottom: 20px;">
+<nav class="container-lg navbar navbar-expand-lg navbar-dark fixed-top nav-bar">
     <div class="container-lg" style="padding-left: 30px;">
         <a class="navbar-brand" href="/">
             <%=configInfo.getFb_name()%>
@@ -83,11 +86,11 @@
             </div>
         </div>
     </div>
-    <div class="container-lg">
+    <div class="container-lg" style="padding: 0;">
         <div id="pin-pan" class="pin">
             <%
                 int count = 0;
-                for(Article art : articles) {
+                for(Article art : allArticles) {
                     if(count > 2) {
                         break;
                     }
@@ -100,7 +103,7 @@
                         summary = summary.replaceAll("\\s*", "");
                         summary = summary.substring(0, Math.min(summary.length(), 100));
                         String html = String.format("<div class=\"ss-card\">\n" +
-                                "                <img src=\"/api/article/img/%s/img\">\n" +
+                                "                <div class=\"pin-img\" style=\"background: url(/api/article/img/get/%s/img)\"></div>\n" +
                                 "                <div>\n" +
                                 "                    <a href=\"/article/%s\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 384 512\"><path d=\"M32 32C32 14.33 46.33 0 64 0H320C337.7 0 352 14.33 352 32C352 49.67 337.7 64 320 64H290.5L301.9 212.2C338.6 232.1 367.5 265.4 381.4 306.9L382.4 309.9C385.6 319.6 383.1 330.4 377.1 338.7C371.9 347.1 362.3 352 352 352H32C21.71 352 12.05 347.1 6.04 338.7C.0259 330.4-1.611 319.6 1.642 309.9L2.644 306.9C16.47 265.4 45.42 232.1 82.14 212.2L93.54 64H64C46.33 64 32 49.67 32 32zM224 384V480C224 497.7 209.7 512 192 512C174.3 512 160 497.7 160 480V384H224z\"/></svg>%s</a>\n" +
                                 "                    <div><span>%s</span></div>\n" +
@@ -130,7 +133,7 @@
                             // 生成 HTML
                             String html = String.format("<div class=\"art-body\">\n" +
                                             "                <div>\n" +
-                                            "                    <div style=\"background: url(/api/article/img/%s/img) center;\"></div>\n" +
+                                            "                    <div style=\"background: url(/api/article/img/get/%s/img) center;\"></div>\n" +
                                             "                </div>\n" +
                                             "                <div>\n" +
                                             "                    <div><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 88.05 64\"><defs><style>.cls-2A{fill:var(--color-main);}</style></defs><g id=\"P_2\" data-name=\"P 2\"><g id=\"P_2-2\" data-name=\"P 2\"><polygon class=\"cls-2A\" points=\"0 0 88.05 0 42.19 33 88.05 64 0 64 0 0\"/></g></g></svg>\n" +
@@ -168,6 +171,18 @@
                 }
             %>
         </div>
+        <%
+            if(max_page > 1) {
+                String html = String.format("\n" +
+                        "        <div class=\"controller\">\n" +
+                        "            <button onclick=\"changePage(false)\" style=\"%s\" class=\"ss-button\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 512\"><path d=\"M137.4 406.6l-128-127.1C3.125 272.4 0 264.2 0 255.1s3.125-16.38 9.375-22.63l128-127.1c9.156-9.156 22.91-11.9 34.88-6.943S192 115.1 192 128v255.1c0 12.94-7.781 24.62-19.75 29.58S146.5 415.8 137.4 406.6z\"/></svg></button>\n" +
+                        "            <div><span>第 %s 页</span></div>\n" +
+                        "            <button onclick=\"changePage(true)\" style=\"%s\" class=\"ss-button\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 512\"><path d=\"M118.6 105.4l128 127.1C252.9 239.6 256 247.8 256 255.1s-3.125 16.38-9.375 22.63l-128 127.1c-9.156 9.156-22.91 11.9-34.88 6.943S64 396.9 64 383.1V128c0-12.94 7.781-24.62 19.75-29.58S109.5 96.23 118.6 105.4z\"/></svg></button>\n" +
+                        "        </div>",
+                        (page_num == 1) ? "display: none;" : "", page_num, (page_num == max_page) ? "display: none;" : "");
+                out.print(html);
+            }
+        %>
     </div>
 </div>
 
@@ -214,6 +229,15 @@
     // 尝试加载头像
     if(getCookie("id")) {
         document.getElementById("avatar-img").src = "/api/account/avatar/" + getCookie("id") + "/img";
+    }
+
+    // 切换页面
+    function changePage(next) {
+        if(!next) {
+            window.location.href = "/page/<%=page_num - 1%>";
+        } else {
+            window.location.href = "/page/<%=page_num + 1%>";
+        }
     }
 
     // 获取 Cookie 值

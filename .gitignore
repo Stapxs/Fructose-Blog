@@ -60,4 +60,12 @@ src/main/resources/*.properties
 !src/main/resources/log4j.properties
 
 # 这是 editor.md 的仓库依赖，为了不影响代码统计故不上传，请自行克隆补全
-src/main/webapp/web/editor
+src/main/webapp/web/editor/*
+!src/main/webapp/web/editor/editormd.js
+
+# 这是 KaTeX 的字体
+src/main/webapp/web/theme/fructose-lite/css/fonts
+# 这是 KaTex 的渲染 css
+src/main/webapp/web/theme/fructose-lite/css/styles
+# 这是 KaTex 的渲染 js
+src/main/webapp/web/theme/fructose-lite/js/scripts
