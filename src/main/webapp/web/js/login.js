@@ -120,8 +120,9 @@ function login(id, name, encrypted) {
                 // 保存 cookie
                 const exp = new Date();
                 exp.setTime(exp.getTime() + 50 * 60 * 1000);
-                document.cookie = "id=" + json.data.id + "; expires=" + exp.toGMTString() + "; path=/";
                 document.cookie = "token=" + json.data.key + "; expires=" + exp.toGMTString() + "; path=/";
+                exp.setTime(exp.getTime() + 500 * 60 * 1000);
+                document.cookie = "id=" + json.data.id + "; expires=" + exp.toGMTString() + "; path=/";
                 document.cookie = "name=" + name + "; expires=" + exp.toGMTString() + "; path=/";
                 // 跳转页面
                 if (getQueryVariable("back") !== false) {

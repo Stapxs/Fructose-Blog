@@ -33,4 +33,6 @@ public interface UserMapper {
     void updateUser(@Param("id")int id, @Param("name")String name, @Param("value")String value);
     @Update("update fb_userinfo set ${name}=#{value} where user_id=#{id}")
     void updateUserInfo(@Param("id")int id, @Param("name")String name, @Param("value")String value);
+    @Update("update fb_user set user_token=null where user_id=#{id}")
+    void delLogInfo(int id);
 }

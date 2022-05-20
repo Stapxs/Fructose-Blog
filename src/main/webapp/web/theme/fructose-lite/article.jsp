@@ -56,6 +56,8 @@
             {delimiters:[{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
 
     <script>
+        gravatar_url = "<%=configInfo.getImg_gravatar()%>";
+        art_id = "<%=article.getArt_id()%>"
         is_auto_dark = true
     </script>
 </head>
@@ -168,24 +170,30 @@
             </div>
         </div>
         <div class="comment-send-card">
-            <div>
+            <div id="login-info-pan">
                 <span>登录身份：</span>
-                <a>Stapx_Steve</a>
+                <a href="/admin" id="login-name"></a>
                 <span>，</span>
-                <a>退出</a>
+                <a onclick="logout()">退出</a>
             </div>
             <div>
-                <img src="/api/account/avatar/0/img">
+                <img id="send-user-img">
                 <div>
+                    <div id="no-login-pan">
+                        <input type="text" placeholder="* 名字" id="comments-name">
+                        <input type="text" placeholder="* 邮箱" id="comments-mail">
+                        <input type="text" placeholder="网站" id="comments-site">
+                    </div>
                     <label id="editor">
                         <textarea></textarea>
                     </label>
                     <div>
-                        <button class="ss-button" id="comment-button">发表评论</button>
+                        <button class="ss-button" id="comment-button" onclick="commentsSend(this)">发表评论</button>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="comment-body" id="comment-body"></div>
     </div>
 </div>
 
@@ -217,6 +225,7 @@
 
 <script src="/editor/editormd.js"></script>
 
+<script src="/theme/<%=configInfo.getCfg_theme()%>/js/md5.min.js"></script>
 <script src="/theme/<%=configInfo.getCfg_theme()%>/js/article.js"></script>
 <script src="/theme/<%=configInfo.getCfg_theme()%>/js/prism.js"></script>
 </html>

@@ -192,6 +192,17 @@ public class userServiceImpl implements UserService {
         }
         return false;
     }
+    /**
+     * @Author Stapxs
+     * @Description 登出
+     * @Date 上午 10:44 2022/05/19
+     * @Param [id]
+     * @return void
+    **/
+    @Override
+    public void logout(int id) {
+        user.delLogInfo(id);
+    }
 
     /**
      * @Author Stapxs

@@ -135,6 +135,17 @@ public class accountController {
         }
     }
 
+    @GetMapping(value = "api/account/logout/{id}", name = "注销")
+    public String logout(@PathVariable int id, Model model) {
+        try {
+            userService.logout(id);
+            return View.api(200, "success", "注销成功！", model);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return View.api(500, "Internal Server Error", ex.getMessage(), model);
+        }
+    }
+
     @PostMapping(value = "api/account/register", name = "注册")
     public String registerAccount(String name, String email, String password, HttpServletRequest request, Model model) {
         try {

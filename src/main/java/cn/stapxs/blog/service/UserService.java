@@ -24,6 +24,8 @@ public interface UserService {
     boolean verifyLogin(int id, String token);
     boolean verifyAdministrator(int id, String token);
 
+    void logout(int id);
+
     // 用户信息系统
     UserInfo getUserInfo(int id);
     void updateUserInfo(int id, String name, String value);

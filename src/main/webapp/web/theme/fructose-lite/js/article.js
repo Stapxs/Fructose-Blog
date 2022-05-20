@@ -19,6 +19,30 @@ $(function() {
 
 // 处理链接显示
 document.getElementById("link_address").innerText = "链接：" + document.URL
+// 尝试加载头像
+if(getCookie("id")) {
+    document.getElementById("avatar-img").src = "/api/account/avatar/" + getCookie("id") + "/img";
+    document.getElementById("send-user-img").src = "/api/account/avatar/" + getCookie("id") + "/img";
+}
+
+// 验证登陆状态
+fetch("/api/account/verify?id=" + getCookie("id") + "&str=" + getCookie("token"), {
+    method: "POST"
+})
+    .then(response => response.json())
+    .then(json => {
+        if (json.code === 200) {
+            document.getElementById("login-name").innerText = getCookie("name")
+            document.getElementById("no-login-pan").parentNode.removeChild(document.getElementById("no-login-pan"))
+            window.logined = true
+        } else {
+            document.getElementById("login-info-pan").innerHTML = `<a href="/login?back=${encodeURIComponent(document.URL.substring(document.URL.indexOf("/")))}">登陆</a><span style="margin-left: 10px;">以使用站内评论。</span>`
+        }
+    })
+    .catch(() => {
+        document.getElementById("login-info-pan").innerHTML = `<a href="/login">登陆</a><span style="margin-left: 10px;">以使用站内评论。</span>`
+    })
+
 
 // 生成目录
 const hTags = document.getElementById("article-main").querySelectorAll("h1, h2, h3, h4")
@@ -113,7 +137,6 @@ fetch("/api/article/list/" + document.getElementById("add-1").dataset.sort)
                 }
                 // 填充列表
                 const id = i - (max - 3) + 1
-                console.log(i + "/" + id)
                 const a = document.getElementById("add-" + id)
                 a.href = "/article/" + data.data[i].article.art_link
                 a.innerText = data.data[i].article.art_title
@@ -125,6 +148,95 @@ fetch("/api/article/list/" + document.getElementById("add-1").dataset.sort)
     .catch(err => {
         console.log(err)
     });
+
+// 加载评论
+fetch("/api/comment/get/article/" + art_id)
+    .then(res => res.json())
+    .then(data => {
+        if (data.code === 200) {
+            const comments = data.data
+            comments.forEach(comment => {
+                buildComment(comment, document.getElementById("comment-body"))
+            });
+        }
+    })
+    .catch(err => {
+        console.log(err)
+    });
+
+function buildComment(comment, addAt) {
+    // 获取参数
+    let user_name = null
+    let user_avatar = null
+    if(comment.user_id === -1) {
+        user_name = comment.user_name
+        user_avatar = gravatar_url + md5(comment.user_mail) + "?s=50"
+        addComment(comment, addAt, user_name, user_avatar)
+    } else {
+        // 获取用户信息
+        fetch("/api/account/base/" + comment.user_id)
+            .then(res => res.json())
+            .then(data => {
+                if (data.code === 200) {
+                    user_name = data.data.user_nick
+                    user_avatar = `/api/account/avatar/${comment.user_id}/img`
+                    addComment(comment, addAt, user_name, user_avatar)
+                }
+            })
+    }
+
+}
+
+function addComment(comment, addAt, user_name, user_avatar) {
+    // 创建元素
+    if(user_name != null && user_avatar != null) {
+        const comment_div = document.createElement("div")
+        comment_div.classList.add("comment-main")
+        comment_div.id = comment.com_id
+        comment_div.innerHTML = `<img name="avater" src="${user_avatar}">
+                <div class="comment-body-body">
+                    <p>${user_name}</p>
+                    <span>${comment.com_comment}</span>
+                </div>
+                <div class="comment-body-control">
+                    <div onclick="comReplay('${comment.com_id}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M8.31 189.9l176-151.1c15.41-13.3 39.69-2.509 39.69 18.16v80.05C384.6 137.9 512 170.1 512 322.3c0 61.44-39.59 122.3-83.34 154.1c-13.66 9.938-33.09-2.531-28.06-18.62c45.34-145-21.5-183.5-176.6-185.8v87.92c0 20.7-24.31 31.45-39.69 18.16l-176-151.1C-2.753 216.6-2.784 199.4 8.31 189.9z"/></svg>
+                        <span>回复</span>
+                    </div>
+                </div>`
+        addAt.appendChild(comment_div)
+        if (comment.com_children !== undefined) {
+            const childrens = comment.com_children.split(",")
+            console.log(comment.com_children)
+            console.log(childrens)
+            childrens.forEach(children => {
+                fetch("/api/comment/get/com/" + children)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.code === 200) {
+                            const comment = data.data
+                            buildComment(comment, comment_div)
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    });
+            })
+        }
+    }
+}
+
+function comReplay(id) {
+    window.replay = id
+    const p = document.createElement("p")
+    p.innerHTML = "<span>回复评论，</span><a onclick=\"comRepCancel()\">取消</a></span>"
+    document.getElementById("login-info-pan").append(p)
+}
+
+function comRepCancel() {
+    window.replay = undefined
+    document.getElementById("login-info-pan").removeChild(document.getElementById("login-info-pan").getElementsByTagName("p")[0])
+}
 
 window.onscroll = function() {
     // 处理顶栏
@@ -224,4 +336,95 @@ function changeContent() {
         body.style.width = "0px"
         body.style.overflow = "hidden"
     }
+}
+
+function logout() {
+    const id = getCookie("id")
+    if(id !== undefined) {
+        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/"
+    }
+    fetch("/api/account/logout/" + id)
+        .finally(() => {
+            window.location.reload()
+        })
+}
+
+// 发送评论
+function commentsSend(sender) {
+    sender.innerHTML = '<svg style="width: 20px;fill: var(--color-font-r);" class="fa-spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M222.7 32.15C227.7 49.08 218.1 66.9 201.1 71.94C121.8 95.55 64 169.1 64 255.1C64 362 149.1 447.1 256 447.1C362 447.1 448 362 448 255.1C448 169.1 390.2 95.55 310.9 71.94C293.9 66.9 284.3 49.08 289.3 32.15C294.4 15.21 312.2 5.562 329.1 10.6C434.9 42.07 512 139.1 512 255.1C512 397.4 397.4 511.1 256 511.1C114.6 511.1 0 397.4 0 255.1C0 139.1 77.15 42.07 182.9 10.6C199.8 5.562 217.6 15.21 222.7 32.15V32.15z"/></svg>';
+    // 收集提交内容
+    const content = window.editor.getHTML()
+    const content_md = window.editor.getMarkdown()
+    if(content === "" || content_md === "") {
+        sender.innerText = "评论不能为空"
+        setTimeout(() => {
+            sender.innerText = "发表评论"
+        }, 3000)
+        return
+    }
+    let url = "/api/comment/send?aid=" + art_id
+    if(window.logined === true) {
+        url += "&uid=" + getCookie("id") + "&utoken=" + getCookie("token")
+    } else {
+        const data = {}
+        data.user_name = document.getElementById("comments-name").value
+        data.user_mail = document.getElementById("comments-mail").value
+        data.user_site = document.getElementById("comments-site").value
+        if(data.user_site === "") {
+            data.user_site = null
+        }
+        // 前两个不能为空
+        if(data.user_name === "" || data.user_mail === "") {
+            sender.innerText = "请填写完整的信息"
+            setTimeout(() => {
+                sender.innerText = "发表评论"
+            }, 3000)
+            return
+        }
+        url += "&info=" + encodeURIComponent(JSON.stringify(data))
+    }
+    if(window.replay !== undefined) {
+        url += "&replay=" + window.replay
+    }
+    console.log(url)
+    // 发起提交
+    fetch(url, {
+        method: "POST",
+        body: JSON.stringify({md: content_md, html: content}),
+    })
+        .then(res => res.json())
+        .then(res => {
+            if(res.code === 200) {
+                // window.location.reload()
+            } else {
+                console.log("发送失败：" + res.str)
+                sender.innerText = "操作失败"
+                setTimeout(() => {
+                    sender.innerText = "发表评论"
+                }, 3000)
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            sender.innerText = "操作失败"
+            setTimeout(() => {
+                sender.innerText = "发表评论"
+            }, 3000)
+        })
+}
+
+// 获取 Cookie 值
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }

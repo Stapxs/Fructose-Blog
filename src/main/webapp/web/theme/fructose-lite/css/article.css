@@ -460,6 +460,7 @@ body {
     flex-direction: column;
     padding: 20px;
     border-top: 7px solid var(--color-main);
+    color: var(--color-font);
 }
 
 .art-body {
@@ -595,14 +596,15 @@ body {
 .comment-send-card > div:first-child a {
     color: var(--color-font-1);
     text-decoration: underline;
+    cursor: pointer;
 }
 .comment-send-card > div:last-child {
     display: flex;
-    margin-top: 20px;
+    margin-top: 5px;
 }
 .comment-send-card > div:last-child > img {
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     border: 2px solid var(--color-main);
     outline: 5px solid var(--color-card-2);
@@ -620,10 +622,28 @@ body {
     border-radius: 7px 7px 0 0;
     margin-bottom: 0;
 }
-.comment-send-card > div:last-child > div > div {
+.comment-send-card > div:last-child > div > div:first-child {
+    background: var(--color-card-1);
+    padding: 20px 10px 10px 10px;
+    border-radius: 7px 7px 0 0;
+    border-left: 6px solid var(--color-card-2);
+    margin: 0 1px -4px;
+    display: flex;
+    flex-direction: row;
+}
+.comment-send-card > div:last-child > div > div:first-child input {
+    width: calc(100% / 3 - 10px);
+    margin: 0 10px;
+    background: var(--color-card-2);
+    border: 0;
+    height: 35px;
+    border-radius: 7px;
+    padding-left: 20px;
+}
+.comment-send-card > div:last-child > div > div:last-child {
     background: var(--color-card-1);
     padding: 10px;
-    border-left: 7px solid var(--color-card-2);
+    border-left: 6px solid var(--color-card-2);
     border-radius: 0 0 7px 7px;
     margin: -2px 1px 0 1px;
     display: flex;
@@ -633,14 +653,81 @@ body {
     width: 100px;
 }
 
+.comment-body {
+    background: var(--color-card);
+    border-radius: 7px;
+    margin-bottom: 20px;
+    padding: 0 30px 30px 30px;
+    margin-top: -20px;
+}
+.content-body > div:last-child {
+    margin-bottom: 0 !important;
+}
+.comment-main {
+    display: flex;
+    background: var(--color-card-1);
+    border-radius: 7px;
+    padding: 20px;
+    margin-left: 65px;
+    margin-bottom: 10px;
+    transition: transform .3s, opacity .3s;
+    flex-wrap: wrap;
+    flex: 1;
+}
+.comment-main > div[class=comment-main] {
+    padding: 0;
+}
+.comment-main img[name="avater"] {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid var(--color-main);
+    outline: 5px solid var(--color-card-2);
+    margin-top: 5px;
+}
+.comment-body-body {
+    flex: 1;
+    margin-left: 20px;
+}
+.comment-body-body p {
+    margin-bottom: 5px;
+}
+.comment-body-body > p {
+    font-weight: bold;
+    margin-top: 10px;
+}
+.comment-body-control {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 10px;
+}
+.comment-body-control > div {
+    background: var(--color-main);
+    fill: var(--color-font-r);
+    color: var(--color-font-r);
+    padding: 5px 20px;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+.comment-body-control > div svg {
+    height: 1rem;
+    margin-right: 5px;
+}
+.comment-replay {
+    margin-left: 65px;
+    padding: 0;
+}
+
 @media (max-width: 992px) {
-    .article-main {
-        padding: 0;
-    }
-    .main > div:last-child {
-        width: 0;
-    }
-    .content {
-        display: none;
-    }
+.article-main {
+    padding: 0;
+}
+.main > div:last-child {
+    width: 0;
+}
+.content {
+    display: none;
+}
 }
