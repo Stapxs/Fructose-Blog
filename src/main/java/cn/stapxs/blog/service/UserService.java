@@ -29,4 +29,6 @@ public interface UserService {
     // 用户信息系统
     UserInfo getUserInfo(int id);
     void updateUserInfo(int id, String name, String value);
+
+    boolean verifyEdit(int id);
 }

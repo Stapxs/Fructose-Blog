@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -88,6 +87,11 @@ public class SortTagController {
             return View.api(403, "forbidden", "验证登录失败或无权限！", model);
         }
     }
+
+//    @GetMapping(value = "api/sort/get/{name}", name = "获取分类下的所有文章")
+//    public String getSortArticles(@PathVariable String name) {
+//
+//    }
 
     // --------------------------------------
 

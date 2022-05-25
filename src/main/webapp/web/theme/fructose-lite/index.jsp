@@ -231,6 +231,20 @@
         document.getElementById("avatar-img").src = "/api/account/avatar/" + getCookie("id") + "/img";
     }
 
+    // 加载设置
+    const config = '<%=configInfo.getTheme_cfgs()%>';
+    if(config !== 'null') {
+        const address = JSON.parse(config).ana_address;
+        fetch(address)
+            .then(res => res.text())
+            .then(res => {
+                document.getElementById("ana").innerText = res;
+            });
+        if(JSON.parse(config).close_pin === true) {
+            document.getElementById("pin-pan").style.display = "none";
+        }
+    }
+
     // 切换页面
     function changePage(next) {
         if(!next) {

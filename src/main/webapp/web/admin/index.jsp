@@ -1,5 +1,6 @@
 <%@ page import="cn.stapxs.blog.AppInfo" %>
 <%@ page import="java.util.Calendar" %>
+<%@ page import="cn.stapxs.blog.model.Config" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%--
   Created by IntelliJ IDEA.
@@ -10,12 +11,12 @@
 --%>
 <%
     int userType = (int) request.getAttribute("userType");
-    String siteName = (String) request.getAttribute("siteName");
+    Config siteConfig = (Config) request.getAttribute("siteConfig");
 %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>设置 - <%=siteName%></title>
+    <title>设置 - <%=siteConfig.getFb_name()%></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -23,7 +24,7 @@
     <meta name="theme-color" content="#313D43">
 
     <meta property="og:locale:alternate" content="zh_CN">
-    <meta property="og:site_name" content="<%=siteName%>">
+    <meta property="og:site_name" content="<%=siteConfig.getFb_name()%>">
     <meta property="og:type" content="blog">
 
     <link rel="stylesheet" href="https://api.stapxs.cn/css/color-dark.css">
@@ -45,7 +46,7 @@
         <div class="main-board">
             <div class="left-list ss-card" id="left-list">
                 <div>
-                    <span><%=siteName%></span>
+                    <span><%=siteConfig.getFb_name()%></span>
                     <svg onclick="changeLeftList()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM64 256C64 238.3 78.33 224 96 224H480C497.7 224 512 238.3 512 256C512 273.7 497.7 288 480 288H96C78.33 288 64 273.7 64 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
                 </div>
                 <div>

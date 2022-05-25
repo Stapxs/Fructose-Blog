@@ -1,3 +1,18 @@
+// 检查登陆状态
+if(getCookie("token") == null){
+    window.location.href = "/login";
+} else {
+    fetch(`/api/account/verify?id=${getCookie("id")}&str=${getCookie("token")}`, {
+        method: "POST"
+    })
+    .then(response => response.json())
+    .then(json => {
+        if(json.code !== 200) {
+            window.location.href = "/login";
+        }
+    })
+}
+
 // 覆写展开事件
 function foldChange(sender) {
     const svg = sender.getElementsByTagName('svg');
@@ -58,6 +73,20 @@ function changeLeftList() {
 
 // 添加标签卡
 function addTab(sender, closeSidebar) {
+    // 检查登陆状态
+    if(getCookie("token") == null){
+        window.location.href = "/login";
+    } else {
+        fetch(`/api/account/verify?id=${getCookie("id")}&str=${getCookie("token")}`, {
+            method: "POST"
+        })
+            .then(response => response.json())
+            .then(json => {
+                if(json.code !== 200) {
+                    window.location.href = "/login";
+                }
+            })
+    }
     const page = sender.dataset.page
     const title = sender.children[1].innerText
     createTab(page, title, closeSidebar)
@@ -116,4 +145,22 @@ function createTab(page, title, closeSidebar) {
     if(closeSidebar) {
         changeLeftList()
     }
+}
+
+// ---------------------------------------------------------------
+
+// 获取 Cookie 值
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }

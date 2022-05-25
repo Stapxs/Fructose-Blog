@@ -48,7 +48,7 @@ public class ArticleController {
             int id, String token, String title, Optional<String> link, @RequestBody String content, Model model) {
         // PS：保存文章的时候优先保存必要数据，包括标题，链接和正文，其他的由前端二次上传
         // 验证登录
-        if (userService.verifyLogin(id, token)) {
+        if (userService.verifyLogin(id, token) && userService.verifyEdit(id)) {
             // 标题和正文不能是空白
             if (title.trim().isEmpty() || content.trim().isEmpty()) {
                 return View.api(400, "Bad Request", "标题不能是空白字符", model);
@@ -74,7 +74,7 @@ public class ArticleController {
     public String updateArticle(
             int id, String token, String art_id, String title, String link, @RequestBody String content, Model model) {
         // 验证登录
-        if (userService.verifyLogin(id, token)) {
+        if (userService.verifyLogin(id, token) && userService.verifyEdit(id)) {
             // 验证文章所有权
             if (articleService.verifyArticle(id, art_id)) {
                 // 标题和正文不能是空白
@@ -100,7 +100,7 @@ public class ArticleController {
     @PostMapping(value = "api/article/delete", name = "删除文章")
     public String deleteArticle(int id, String token, String art_id, Model model) {
         // 验证登录
-        if (userService.verifyLogin(id, token)) {
+        if (userService.verifyLogin(id, token) && userService.verifyEdit(id)) {
             // 验证文章所有权
             if (articleService.verifyArticle(id, art_id)) {
                 // 提交数据
@@ -122,7 +122,7 @@ public class ArticleController {
     @PostMapping(value = "api/article/upload/html", name = "上传预生成的 HTML")
     public String uploadArticleHtml(int id, String token, String artId, @RequestBody String html, Model model) {
         // 验证登录
-        if (userService.verifyLogin(id, token)) {
+        if (userService.verifyLogin(id, token) && userService.verifyEdit(id)) {
             // 验证文章所有权
             if (articleService.verifyArticle(id, artId)) {
                 // 提交数据
@@ -144,7 +144,7 @@ public class ArticleController {
     @PostMapping(value = "api/article/upload/option", name = "更新文章选项设置")
     public String uploadArticleOption(int id, String token, String artId, @RequestBody String option, Model model) {
         // 验证登录
-        if (userService.verifyLogin(id, token)) {
+        if (userService.verifyLogin(id, token) && userService.verifyEdit(id)) {
             // 验证文章所有权
             if (articleService.verifyArticle(id, artId)) {
                 // 提交数据
@@ -277,7 +277,7 @@ public class ArticleController {
     public String uploadArtImg(int id, String token, @RequestParam("uploadFile") MultipartFile uploadFile, HttpSession session, Model model) {
         try {
             // 验证登录
-            if (userService.verifyLogin(id, token)) {
+            if (userService.verifyLogin(id, token) && userService.verifyEdit(id)) {
                 // 文件为空
                 if (uploadFile.isEmpty()) {
                     model.addAttribute("code", "403");

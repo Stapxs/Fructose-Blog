@@ -1,0 +1,26 @@
+.art_main {
+    flex: 1;
+    padding: 20px;
+}
+.art_main img {
+    max-width: 100%;
+}
+
+.art_info {
+    border-bottom: 1px solid #00000047;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    margin: -20px -20px 0 -20px;
+}
+.art_info > div {
+    flex: 1;
+}
+.art_info > div p {
+    margin: 0;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+.art_info > div > span {
+    opacity: 0.5;
+}

@@ -61,7 +61,7 @@ fetch("/api/article/list")
                 method: "POST"
             })
                 .finally(() => {
-                    location.reload();
+                    location.href = "/admin/article_list";
                 })
         }
     })

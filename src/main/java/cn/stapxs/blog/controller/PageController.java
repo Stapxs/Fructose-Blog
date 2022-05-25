@@ -2,6 +2,7 @@ package cn.stapxs.blog.controller;
 
 import cn.stapxs.blog.model.Article;
 import cn.stapxs.blog.model.Config;
+import cn.stapxs.blog.model.SortInfo;
 import cn.stapxs.blog.model.user.User;
 import cn.stapxs.blog.model.user.UserInfo;
 import cn.stapxs.blog.service.ArticleService;
@@ -107,6 +108,13 @@ public class PageController {
         return View.api(500, "Internal Server Error", "页面路由失败 ……", model);
     }
 
+    // 分类页索引
+//    @RequestMapping(value = {"/category", "/category/{name}"})
+//    public String category(@PathVariable Optional<String> name, Model model) {
+//        // 获取分类信息
+//        // Optional<SortInfo> sortInfo = Optional.ofNullable(sortTag.));
+//    }
+
     // ---------------------------------------------------------------
 
     // 错误页索引
@@ -138,7 +146,7 @@ public class PageController {
             return View.login(configInfo, "admin", model);
         }
         // 其他数据
-        model.addAttribute("siteName", configInfo.getFb_name());
+        model.addAttribute("siteConfig", configInfo);
         model.addAttribute("userInfo", info);
         value.ifPresent(s -> model.addAttribute("value", s));
         // 返回

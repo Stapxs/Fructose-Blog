@@ -10,7 +10,7 @@ fetch("/api/config/string/cfg_theme")
                 .then(response => response.json())
                 .then(data => {
                     // 显示配置项
-                    const config = data.config;
+                    const config = data.config_art;
                     const list = document.getElementById("add-opt-list")
                     config.forEach(item => {
                         let input = ""

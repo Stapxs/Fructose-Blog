@@ -25,6 +25,7 @@ public class Config {
     private String img_gravatar;
     private boolean cfg_allow_reg;
     private String cfg_theme;
+    private String theme_cfgs;
     private String cfg_token;
     private int cfg_statue;
 }

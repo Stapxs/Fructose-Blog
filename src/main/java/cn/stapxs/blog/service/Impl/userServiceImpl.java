@@ -242,4 +242,17 @@ public class userServiceImpl implements UserService {
     public void updateUserInfo(int id, String name, String value) {
         user.updateUserInfo(id, name, value);
     }
+
+    /**
+     * @Author Stapxs
+     * @Description 验证用户是否拥有文章编辑权限
+     * @Date 上午 11:20 2022/05/25
+     * @Param [id]
+     * @return boolean
+    **/
+    @Override
+    public boolean verifyEdit(int id) {
+        User info = user.getUserByID(id);
+        return info.getAccount_status() >= 2;
+    }
 }
