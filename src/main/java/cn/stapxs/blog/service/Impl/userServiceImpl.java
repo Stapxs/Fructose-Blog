@@ -188,7 +188,7 @@ public class userServiceImpl implements UserService {
         // 验证 token
         if(userOptional.filter(value -> token.equals(value.getUser_token())).isPresent()) {
             // 验证权限
-            return userOptional.get().getAccount_type() == 0;
+            return userOptional.get().getAccount_type() == 3;
         }
         return false;
     }
@@ -253,6 +253,7 @@ public class userServiceImpl implements UserService {
     @Override
     public boolean verifyEdit(int id) {
         User info = user.getUserByID(id);
-        return info.getAccount_status() >= 2;
+        System.out.println(info.getAccount_status());
+        return info.getAccount_type() >= 2;
     }
 }

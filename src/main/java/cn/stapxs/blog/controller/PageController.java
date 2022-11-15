@@ -7,20 +7,16 @@ import cn.stapxs.blog.model.user.User;
 import cn.stapxs.blog.model.user.UserInfo;
 import cn.stapxs.blog.service.ArticleService;
 import cn.stapxs.blog.service.ConfigService;
-import cn.stapxs.blog.service.Impl.configServiceImpl;
 import cn.stapxs.blog.service.SortTagService;
 import cn.stapxs.blog.service.UserService;
 import cn.stapxs.blog.util.View;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -109,11 +105,26 @@ public class PageController {
     }
 
     // 分类页索引
-//    @RequestMapping(value = {"/category", "/category/{name}"})
-//    public String category(@PathVariable Optional<String> name, Model model) {
-//        // 获取分类信息
-//        // Optional<SortInfo> sortInfo = Optional.ofNullable(sortTag.));
-//    }
+    @RequestMapping(value = {"/category", "/category/{name}"})
+    public String category(@PathVariable Optional<String> name, Model model) {
+        // 获取分类信息
+        if(name.isPresent()) {
+            String categoryName = name.get().substring(0, 1).toUpperCase() + name.get().substring(1);
+            Optional<SortInfo> sortInfo = Optional.ofNullable(sortTag.getSortInfo(categoryName));
+            Optional<List<Article>> articles = Optional.ofNullable(sortTag.getArticleListBySort(categoryName));
+            if(sortInfo.isPresent() && articles.isPresent()) {
+                model.addAttribute("config", config.getConfig());
+                model.addAttribute("sort", sortTag.getSortList());
+                model.addAttribute("now-sort", sortInfo.get());
+                model.addAttribute("articles", articles.get());
+                return "theme/" + config.getConfig().getCfg_theme() + "/category";
+            } else {
+                return View.api(404, "Not Found", "获取分类信息失败 ……", model);
+            }
+        } else {
+            return View.api(500, "Internal Server Error", "页面路由失败 ……", model);
+        }
+    }
 
     // ---------------------------------------------------------------
 

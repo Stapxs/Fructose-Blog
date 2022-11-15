@@ -1,5 +1,5 @@
 .main-list {
-
+    color: var(--color-font);
 }
 .main-list > div {
     display: flex;

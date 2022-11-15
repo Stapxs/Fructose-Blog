@@ -1,5 +1,6 @@
 package cn.stapxs.blog.controller;
 
+import cn.stapxs.blog.model.Article;
 import cn.stapxs.blog.model.SortInfo;
 import cn.stapxs.blog.service.SortTagService;
 import cn.stapxs.blog.service.UserService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @Version: 1.0
@@ -88,10 +90,19 @@ public class SortTagController {
         }
     }
 
-//    @GetMapping(value = "api/sort/get/{name}", name = "获取分类下的所有文章")
-//    public String getSortArticles(@PathVariable String name) {
-//
-//    }
+    @GetMapping(value = "api/sort/get/{name}", name = "获取分类下的所有文章")
+    public String getSortArticles(@PathVariable String name, Model model) {
+        try {
+            Optional<List<Article>> articles = Optional.ofNullable(sortTagService.getArticleListBySort(name));
+            if(articles.isPresent()) {
+                return View.api(200, "success", articles.get(), model);
+            } else {
+                return View.api(404, "Not Found", "没有找到该分类或分类没有文章！", model);
+            }
+        } catch (Exception e) {
+            return View.api(500, "Internal Server Error", "未知错误！", model);
+        }
+    }
 
     // --------------------------------------
 

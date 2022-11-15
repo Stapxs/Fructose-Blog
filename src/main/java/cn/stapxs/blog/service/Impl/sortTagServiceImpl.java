@@ -1,10 +1,13 @@
 package cn.stapxs.blog.service.Impl;
 
 import cn.stapxs.blog.mapper.SortTagMapper;
+import cn.stapxs.blog.model.Article;
 import cn.stapxs.blog.model.SortInfo;
 import cn.stapxs.blog.service.SortTagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Version: 1.0
@@ -32,6 +35,11 @@ public class sortTagServiceImpl implements SortTagService {
     }
 
     @Override
+    public SortInfo getSortInfo(String name) {
+        return mapper.getSortInfo(name);
+    }
+
+    @Override
     public void addSort(SortInfo sortInfo) {
         mapper.addSort(sortInfo);
     }
@@ -39,5 +47,10 @@ public class sortTagServiceImpl implements SortTagService {
     @Override
     public void deleteSort(String name) {
         mapper.deleteSort(name);
+    }
+
+    @Override
+    public List<Article> getArticleListBySort(String name) {
+        return mapper.getArticleBySort(name);
     }
 }
